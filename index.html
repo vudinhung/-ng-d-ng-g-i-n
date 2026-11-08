@@ -1,0 +1,5138 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HEN 🐔 - Hưng & Ngân Eat the World</title>
+  <style>
+    /* ==========================================================================
+       CSS VARIABLES & THEMES (Food Journal / Sổ Tay Ẩm Thực Warm Aesthetic)
+       ========================================================================== */
+    :root {
+      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      
+      /* Light Theme: Warm cream background & Terracotta / Brick red accents */
+      --bg-app: #faf6f0;
+      --bg-surface: #ffffff;
+      --bg-surface-subtle: #f3ece2;
+      --border-color: #e5dacd;
+      --border-focus: #c85a32;
+
+      --text-main: #2d2420;
+      --text-muted: #6e625a;
+      --text-faint: #988c83;
+
+      --primary: #c85a32;
+      --primary-hover: #b14b25;
+      --primary-active: #9b3e1c;
+      --primary-contrast: #ffffff;
+      --primary-subtle: #faece5;
+
+      --accent: #8c5b36;
+      --accent-subtle: #f4ece2;
+
+      --danger: #c53030;
+      --danger-hover: #9b2c2c;
+      --danger-subtle: #fee2e2;
+
+      --shadow-soft: 0 2px 8px rgba(45, 36, 32, 0.06);
+      --shadow-modal: 0 10px 30px rgba(45, 36, 32, 0.18);
+
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+
+      /* Badge palette (Gentle, soft, balanced saturation) */
+      --badge-bun-pho-bg: #faede6;
+      --badge-bun-pho-text: #a44318;
+      --badge-com-bg: #fdf3e2;
+      --badge-com-text: #96610c;
+      --badge-lau-bg: #fce8e8;
+      --badge-lau-text: #ab2b2b;
+      --badge-nuong-bg: #f6ebd8;
+      --badge-nuong-text: #7b4618;
+      --badge-an-vat-bg: #fae8ee;
+      --badge-an-vat-text: #9e335b;
+      --badge-cafe-bg: #eee9e2;
+      --badge-cafe-text: #5e4738;
+      --badge-khac-bg: #e9ecef;
+      --badge-khac-text: #495057;
+
+      --status-eaten-bg: #eaf5eb;
+      --status-eaten-text: #246830;
+      --status-wishlist-bg: #fdf5e6;
+      --status-wishlist-text: #995c00;
+    }
+
+    [data-theme="dark"] {
+      /* Dark Theme: Warm roasted charcoal / walnut brown (NOT pure black) */
+      --bg-app: #1c1816;
+      --bg-surface: #27211e;
+      --bg-surface-subtle: #342c28;
+      --border-color: #443933;
+      --border-focus: #e07246;
+
+      --text-main: #f3ece6;
+      --text-muted: #b4a69c;
+      --text-faint: #817267;
+
+      --primary: #d96b43;
+      --primary-hover: #e57f59;
+      --primary-active: #c5572e;
+      --primary-contrast: #ffffff;
+      --primary-subtle: #3f2a22;
+
+      --accent: #b88656;
+      --accent-subtle: #382c23;
+
+      --danger: #e53e3e;
+      --danger-hover: #fc8181;
+      --danger-subtle: #4c1d1d;
+
+      --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.35);
+      --shadow-modal: 0 10px 30px rgba(0, 0, 0, 0.6);
+
+      --badge-bun-pho-bg: #3d241b;
+      --badge-bun-pho-text: #f0a282;
+      --badge-com-bg: #3b2e1a;
+      --badge-com-text: #e6b864;
+      --badge-lau-bg: #3d1f22;
+      --badge-lau-text: #f29494;
+      --badge-nuong-bg: #382618;
+      --badge-nuong-text: #e2a677;
+      --badge-an-vat-bg: #3b1f2b;
+      --badge-an-vat-text: #ea96b7;
+      --badge-cafe-bg: #302722;
+      --badge-cafe-text: #cfb8a8;
+      --badge-khac-bg: #2d3133;
+      --badge-khac-text: #b6c0c5;
+
+      --status-eaten-bg: #1e3323;
+      --status-eaten-text: #8edaa0;
+      --status-wishlist-bg: #382c18;
+      --status-wishlist-text: #f3c36c;
+    }
+
+    /* Category Badges */
+    .cat-bun-pho { background-color: var(--badge-bun-pho-bg); color: var(--badge-bun-pho-text); }
+    .cat-com { background-color: var(--badge-com-bg); color: var(--badge-com-text); }
+    .cat-lau { background-color: var(--badge-lau-bg); color: var(--badge-lau-text); }
+    .cat-nuong { background-color: var(--badge-nuong-bg); color: var(--badge-nuong-text); }
+    .cat-an-vat { background-color: var(--badge-an-vat-bg); color: var(--badge-an-vat-text); }
+    .cat-cafe { background-color: var(--badge-cafe-bg); color: var(--badge-cafe-text); }
+    .cat-khac { background-color: var(--badge-khac-bg); color: var(--badge-khac-text); }
+
+    /* ==========================================================================
+       RESET & BASE TYPOGRAPHY
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-family);
+      font-size: 15px;
+      line-height: 1.5;
+      background-color: var(--bg-app);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.2s ease, color 0.2s ease;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, input, select, textarea {
+      font-family: inherit;
+      font-size: 15px;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 2px solid var(--border-focus);
+      outline-offset: 2px;
+    }
+
+    /* ==========================================================================
+       HEADER
+       ========================================================================== */
+    .app-header {
+      background-color: var(--bg-surface);
+      border-bottom: 1px solid var(--border-color);
+      box-shadow: var(--shadow-soft);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-container {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-logo {
+      font-size: 30px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      background-color: var(--primary-subtle);
+      border-radius: var(--radius-md);
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-title {
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.3px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .brand-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Common interactive buttons - min-height 40px */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 40px;
+      padding: 0 16px;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.05s ease;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .btn-sm {
+      min-height: 34px;
+      padding: 0 12px;
+      font-size: 13px;
+      border-radius: var(--radius-sm);
+    }
+
+    .btn:active:not(:disabled) {
+      transform: translateY(1px);
+    }
+
+    .btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background-color: var(--bg-surface-subtle);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background-color: var(--border-color);
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--primary-contrast);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background-color: var(--primary-hover);
+    }
+
+    .btn-primary:active:not(:disabled) {
+      background-color: var(--primary-active);
+    }
+
+    .btn-danger {
+      background-color: var(--danger-subtle);
+      color: var(--danger);
+      border: 1px solid var(--danger);
+    }
+
+    .btn-danger:hover:not(:disabled) {
+      background-color: var(--danger);
+      color: #ffffff;
+    }
+
+    .btn-icon {
+      width: 40px;
+      height: 40px;
+      min-height: 40px;
+      padding: 0;
+      border-radius: var(--radius-md);
+      background-color: var(--bg-surface-subtle);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-icon:hover {
+      background-color: var(--border-color);
+    }
+
+    .city-switch-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: var(--bg-surface-subtle);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      border-radius: var(--radius-md);
+      min-height: 40px;
+      padding: 0 14px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .city-switch-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background-color: var(--primary-subtle);
+    }
+
+    .city-tag {
+      font-weight: 700;
+    }
+
+    .city-action-hint {
+      font-size: 12px;
+      font-weight: normal;
+      color: var(--text-muted);
+      border-left: 1px solid var(--border-color);
+      padding-left: 8px;
+      margin-left: 2px;
+    }
+
+    /* ==========================================================================
+       MAIN CONTENT CONTAINER
+       ========================================================================== */
+    .app-main {
+      flex: 1;
+      max-width: 1360px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* ==========================================================================
+       STATS BAR (Khối thống kê nhẹ ở đầu trang)
+       ========================================================================== */
+    .stats-section {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .stat-card {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.5px;
+    }
+
+    .stat-value.highlight {
+      color: var(--primary);
+    }
+
+    .stat-value.truncate {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 18px;
+      line-height: 1.35;
+    }
+
+    /* ==========================================================================
+       2-COLUMN LAYOUT
+       ========================================================================== */
+    .content-grid {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    /* ==========================================================================
+       VÒNG QUAY MAY MẮN (Phase 4 - Cột Trái)
+       ========================================================================== */
+    .wheel-column {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: sticky;
+      top: 84px;
+    }
+
+    .wheel-card {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 20px 16px;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .wheel-header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .wheel-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .wheel-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: block;
+    }
+
+    .wheel-stage {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      margin: 6px 0;
+    }
+
+    .wheel-pointer {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 13px solid transparent;
+      border-right: 13px solid transparent;
+      border-top: 26px solid var(--primary);
+      z-index: 10;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    }
+
+    #wheelCanvas {
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      display: block;
+    }
+
+    .wheel-controls {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-spin {
+      width: 100%;
+      min-height: 44px;
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 12px rgba(200, 90, 50, 0.25);
+    }
+
+    .wheel-status-hint {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-align: center;
+      min-height: 20px;
+    }
+
+    .temp-excluded-banner {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+      background-color: var(--bg-surface-subtle);
+      border: 1px dashed var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 6px 10px;
+    }
+
+    .restore-excluded-btn {
+      color: var(--primary);
+      font-weight: 700;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+
+    .restore-excluded-btn:hover {
+      text-decoration: underline;
+    }
+
+    /* Fireworks Canvas */
+    .fireworks-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 6000;
+      display: none;
+    }
+
+    /* Right Column: Restaurant List Grid */
+    .list-column {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .list-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .list-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .list-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .list-city-badge {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background-color: var(--primary-subtle);
+      color: var(--primary);
+    }
+
+    /* ==========================================================================
+       SEARCH & FILTERS BAR (Phase 3)
+       ========================================================================== */
+    .filter-panel {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .search-input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      font-size: 16px;
+      color: var(--text-muted);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .search-input {
+      width: 100%;
+      min-height: 42px;
+      padding: 8px 75px 8px 40px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background-color: var(--bg-surface-subtle);
+      color: var(--text-main);
+      font-size: 14px;
+      transition: border-color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .search-input:focus {
+      border-color: var(--border-focus);
+      background-color: var(--bg-surface);
+    }
+
+    .search-actions {
+      position: absolute;
+      right: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .search-clear-btn {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background-color: var(--border-color);
+      color: var(--text-muted);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      cursor: pointer;
+    }
+
+    .search-clear-btn:hover {
+      background-color: var(--primary);
+      color: #ffffff;
+    }
+
+    .search-clear-btn.visible {
+      display: inline-flex;
+    }
+
+    .search-shortcut-pill {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background-color: var(--bg-surface);
+      color: var(--text-faint);
+      border: 1px solid var(--border-color);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .category-chips-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter-chip {
+      min-height: 34px;
+      padding: 0 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-surface-subtle);
+      color: var(--text-muted);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+
+    .filter-chip:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .filter-chip.active {
+      background-color: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    .filter-controls-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding-top: 10px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .filter-group-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .segmented-control {
+      display: inline-flex;
+      background-color: var(--bg-surface-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 2px;
+      gap: 2px;
+    }
+
+    .segmented-btn {
+      min-height: 32px;
+      padding: 0 12px;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 6px;
+      color: var(--text-muted);
+      background: none;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .segmented-btn:hover {
+      color: var(--text-main);
+    }
+
+    .segmented-btn.active {
+      background-color: var(--bg-surface);
+      color: var(--primary);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .switch-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .switch-input {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 38px;
+      height: 22px;
+      background-color: var(--border-color);
+      border-radius: 999px;
+      position: relative;
+      cursor: pointer;
+      outline: none;
+      transition: background-color 0.2s ease;
+      vertical-align: middle;
+    }
+
+    .switch-input::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 16px;
+      height: 16px;
+      background-color: #ffffff;
+      border-radius: 50%;
+      transition: transform 0.2s ease;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    .switch-input:checked {
+      background-color: var(--primary);
+    }
+
+    .switch-input:checked::after {
+      transform: translateX(16px);
+    }
+
+    .price-slider-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+    }
+
+    .price-slider-label {
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .price-slider-val {
+      font-weight: 700;
+      color: var(--primary);
+      min-width: 75px;
+    }
+
+    .price-slider {
+      width: 120px;
+      height: 6px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .reset-filters-btn {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--danger);
+      background: none;
+      border: 1px dashed var(--danger);
+      border-radius: var(--radius-sm);
+      padding: 5px 10px;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+    }
+
+    .reset-filters-btn:hover {
+      background-color: var(--danger-subtle);
+    }
+
+    .reset-filters-btn.visible {
+      display: inline-flex;
+    }
+
+    .dup-warning-box {
+      background-color: #fff8e6;
+      border: 1px solid #ffe082;
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      font-size: 14px;
+      color: #795548;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    [data-theme="dark"] .dup-warning-box {
+      background-color: #3e2e18;
+      border-color: #6d4c1b;
+      color: #ffe082;
+    }
+
+    .restaurants-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 20px;
+    }
+
+    /* ==========================================================================
+       RESTAURANT CARD DESIGN
+       ========================================================================== */
+    .restaurant-card {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .restaurant-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(45, 36, 32, 0.1);
+    }
+
+    .card-cover-wrap {
+      width: 100%;
+      height: 175px;
+      background-color: var(--bg-surface-subtle);
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .card-cover-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.25s ease;
+    }
+
+    .card-cover-wrap:hover .card-cover-img {
+      transform: scale(1.03);
+    }
+
+    .card-cover-fallback {
+      font-size: 48px;
+      line-height: 1;
+      opacity: 0.8;
+      user-select: none;
+    }
+
+    .card-photo-count {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      background: rgba(28, 24, 22, 0.75);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      backdrop-filter: blur(2px);
+    }
+
+    .card-status-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 9px;
+      border-radius: 999px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    }
+
+    .status-eaten {
+      background-color: var(--status-eaten-bg);
+      color: var(--status-eaten-text);
+      border: 1px solid currentColor;
+    }
+
+    .status-wishlist {
+      background-color: var(--status-wishlist-bg);
+      color: var(--status-wishlist-text);
+      border: 1px solid currentColor;
+    }
+
+    .card-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .card-top-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.3;
+      word-break: break-word;
+    }
+
+    .card-category-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 999px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .card-ratings-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 13px;
+      padding: 6px 10px;
+      background-color: var(--bg-surface-subtle);
+      border-radius: var(--radius-sm);
+    }
+
+    .card-rating-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .rating-name {
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .rating-stars {
+      color: #e59819;
+      font-weight: 700;
+    }
+
+    .rating-empty {
+      color: var(--text-faint);
+    }
+
+    .card-info-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .card-info-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .card-price {
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .card-review {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-style: italic;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      background-color: var(--bg-app);
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      border-left: 3px solid var(--border-color);
+    }
+
+    .card-footer-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      padding-top: 8px;
+      border-top: 1px solid var(--border-color);
+      margin-top: auto;
+    }
+
+    /* ==========================================================================
+       FORM STYLING & MODAL (Phase 2)
+       ========================================================================== */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group.col-span-2 {
+      grid-column: 1 / -1;
+    }
+
+    .form-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .form-label .required {
+      color: var(--primary);
+      margin-left: 2px;
+    }
+
+    .form-control {
+      min-height: 40px;
+      padding: 8px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background-color: var(--bg-surface);
+      color: var(--text-main);
+      width: 100%;
+      transition: border-color 0.15s ease;
+    }
+
+    .form-control:focus {
+      border-color: var(--border-focus);
+    }
+
+    textarea.form-control {
+      min-height: 72px;
+      resize: vertical;
+    }
+
+    /* Dropzone for Image upload */
+    .image-dropzone {
+      border: 2px dashed var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 20px 16px;
+      text-align: center;
+      background-color: var(--bg-surface-subtle);
+      transition: border-color 0.15s ease, background-color 0.15s ease;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .image-dropzone.dragover {
+      border-color: var(--primary);
+      background-color: var(--primary-subtle);
+    }
+
+    .dropzone-icon {
+      font-size: 32px;
+      line-height: 1;
+    }
+
+    .dropzone-text {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .dropzone-subtext {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Phase 5: Import Dropzone */
+    .import-drop-zone {
+      border: 2px dashed var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 24px 16px;
+      text-align: center;
+      background-color: var(--bg-surface-subtle);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .import-drop-zone:hover,
+    .import-drop-zone.dragover {
+      border-color: var(--primary);
+      background-color: var(--primary-subtle);
+    }
+
+    /* Image Preview Grid inside Form */
+    .image-previews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .image-preview-card {
+      position: relative;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background-color: var(--bg-surface);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .image-preview-thumb {
+      width: 100%;
+      height: 90px;
+      object-fit: cover;
+    }
+
+    .image-preview-actions {
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      background-color: var(--bg-surface-subtle);
+    }
+
+    .type-toggle-btn {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 6px;
+      border-radius: var(--radius-sm);
+      text-align: center;
+      cursor: pointer;
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-surface);
+      color: var(--text-main);
+      transition: all 0.15s ease;
+    }
+
+    .type-toggle-btn.is-menu {
+      background-color: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    .image-delete-btn {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(28, 24, 22, 0.75);
+      color: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      cursor: pointer;
+      border: none;
+      transition: background-color 0.15s ease;
+    }
+
+    .image-delete-btn:hover {
+      background: var(--danger);
+    }
+
+    /* ==========================================================================
+       LIGHTBOX (Phase 2 - Toàn màn hình)
+       ========================================================================== */
+    .lightbox-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(18, 14, 12, 0.94);
+      z-index: 5000;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .lightbox-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .lightbox-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      color: #ffffff;
+      z-index: 2;
+    }
+
+    .lightbox-title-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .lightbox-restaurant-name {
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .lightbox-type-pill {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background-color: var(--primary);
+      color: #ffffff;
+    }
+
+    .lightbox-counter {
+      font-size: 13px;
+      color: #b4a69c;
+    }
+
+    .lightbox-content-area {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 0 80px;
+      overflow: hidden;
+    }
+
+    .lightbox-main-img {
+      max-width: 100%;
+      max-height: 80vh;
+      object-fit: contain;
+      border-radius: var(--radius-sm);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+      user-select: none;
+    }
+
+    .lightbox-nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: rgba(45, 36, 32, 0.65);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.2);
+      transition: background-color 0.15s ease, transform 0.1s ease;
+      z-index: 3;
+    }
+
+    .lightbox-nav-btn:hover {
+      background: rgba(200, 90, 50, 0.85);
+      transform: translateY(-50%) scale(1.08);
+    }
+
+    .lightbox-nav-btn.prev {
+      left: 20px;
+    }
+
+    .lightbox-nav-btn.next {
+      right: 20px;
+    }
+
+    .lightbox-close-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+      border: none;
+      transition: background-color 0.15s ease;
+    }
+
+    .lightbox-close-btn:hover {
+      background: rgba(255,255,255,0.3);
+    }
+
+    /* ==========================================================================
+       EMPTY, LOADING & ERROR STATES (Thân thiện, kèm 🐔)
+       ========================================================================== */
+    .state-panel {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 56px 24px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      box-shadow: var(--shadow-soft);
+      min-height: 280px;
+    }
+
+    .state-icon {
+      font-size: 52px;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .state-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .state-desc {
+      font-size: 15px;
+      color: var(--text-muted);
+      max-width: 440px;
+      line-height: 1.5;
+    }
+
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid var(--border-color);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ==========================================================================
+       FOOTER
+       ========================================================================== */
+    .app-footer {
+      background-color: var(--bg-surface);
+      border-top: 1px solid var(--border-color);
+      margin-top: auto;
+    }
+
+    .footer-container {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .backup-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .backup-bullet {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--text-faint);
+    }
+
+    .footer-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .footer-brand-note {
+      font-size: 13px;
+      color: var(--text-faint);
+    }
+
+    /* ==========================================================================
+       MODALS & WELCOME OVERLAY
+       ========================================================================== */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(28, 24, 22, 0.65);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+      overflow-y: auto;
+    }
+
+    .modal-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-box {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      width: 100%;
+      max-width: 520px;
+      box-shadow: var(--shadow-modal);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      transform: translateY(8px);
+      transition: transform 0.2s ease;
+      margin: auto;
+    }
+
+    .modal-box.modal-large {
+      max-width: 720px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-backdrop.active .modal-box {
+      transform: translateY(0);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .modal-title {
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .modal-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .city-picker-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .city-card-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 24px 16px;
+      border-radius: var(--radius-md);
+      border: 2px solid var(--border-color);
+      background-color: var(--bg-surface-subtle);
+      transition: border-color 0.15s ease, background-color 0.15s ease, transform 0.1s ease;
+      text-align: center;
+    }
+
+    .city-card-btn:hover {
+      border-color: var(--primary);
+      background-color: var(--primary-subtle);
+      transform: translateY(-2px);
+    }
+
+    .city-card-btn.selected {
+      border-color: var(--primary);
+      background-color: var(--primary-subtle);
+    }
+
+    .city-card-pin {
+      font-size: 32px;
+      line-height: 1;
+    }
+
+    .city-card-name {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .city-card-code {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    /* Welcome overlay specific full-cover styling */
+    .welcome-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--bg-app);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      padding: 24px;
+    }
+
+    .welcome-card {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 36px 32px;
+      width: 100%;
+      max-width: 540px;
+      box-shadow: var(--shadow-modal);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .welcome-logo {
+      font-size: 54px;
+      line-height: 1;
+    }
+
+    .welcome-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.5px;
+    }
+
+    .welcome-desc {
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .welcome-prompt {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-top: 4px;
+    }
+
+    /* ==========================================================================
+       TOAST NOTIFICATIONS & UNDO ACTION
+       ========================================================================== */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 420px;
+      pointer-events: none;
+    }
+
+    .toast {
+      background-color: var(--bg-surface);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--primary);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      box-shadow: var(--shadow-modal);
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      pointer-events: auto;
+      animation: slideIn 0.25s ease forwards;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .toast.toast-error {
+      border-left-color: #d32f2f;
+    }
+
+    .toast.toast-success {
+      border-left-color: #2e7d32;
+    }
+
+    .toast.toast-fadeout {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+
+    .toast-undo-btn {
+      margin-left: auto;
+      background-color: var(--primary);
+      color: #ffffff;
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: background-color 0.15s ease;
+    }
+
+    .toast-undo-btn:hover {
+      background-color: var(--primary-hover);
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ==========================================================================
+       RESPONSIVE BREAKPOINTS
+       ========================================================================== */
+    @media (max-width: 960px) {
+      .stats-section {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+      .wheel-column {
+        order: 2;
+        position: static;
+      }
+      .list-column {
+        order: 1;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .header-container {
+        padding: 10px 16px;
+      }
+      .app-main {
+        padding: 16px;
+      }
+      .stats-section {
+        grid-template-columns: 1fr;
+      }
+      .city-picker-options {
+        grid-template-columns: 1fr;
+      }
+      .footer-container {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .lightbox-content-area {
+        padding: 0 40px;
+      }
+      .lightbox-nav-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+      }
+      .filter-controls-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Canvas Pháo Hoa Toàn Màn Hình (Phase 4) -->
+  <canvas id="fireworksCanvas" class="fireworks-canvas"></canvas>
+
+  <!-- ==========================================================================
+       HEADER
+       ========================================================================== -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-section">
+        <span class="brand-logo" aria-hidden="true">🐔</span>
+        <div class="brand-text">
+          <h1 class="brand-title">HEN 🐔 - Hưng & Ngân Eat the World</h1>
+          <span class="brand-subtitle">Sổ tay khám phá ẩm thực offline</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- City display & switch button -->
+        <button id="cityBtn" class="city-switch-btn" type="button" title="Bấm để đổi thành phố" aria-haspopup="dialog">
+          <span>📍</span>
+          <span id="currentCityLabel" class="city-tag">Hà Nội (HN)</span>
+          <span class="city-action-hint">Đổi</span>
+        </button>
+
+        <!-- Theme Toggle Button -->
+        <button id="themeToggleBtn" class="btn-icon" type="button" title="Đổi giao diện Sáng / Tối" aria-label="Đổi giao diện Sáng / Tối">
+          <svg id="themeIconSun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg id="themeIconMoon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       MAIN CONTENT
+       ========================================================================== -->
+  <main class="app-main">
+    <!-- Khối thống kê nhẹ ở đầu trang (Toàn bộ quán trong thành phố, không bị lọc) -->
+    <section class="stats-section" aria-label="Thống kê quán ăn">
+      <div class="stat-card">
+        <span class="stat-label">Tổng số quán</span>
+        <span id="statTotal" class="stat-value">0</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Số Đã ăn</span>
+        <span id="statEaten" class="stat-value highlight">0</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Số Muốn thử</span>
+        <span id="statWishlist" class="stat-value">0</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Quán điểm cao nhất</span>
+        <span id="statTopRated" class="stat-value truncate" title="Chưa có dữ liệu">—</span>
+      </div>
+    </section>
+
+    <!-- 2 Cột: Cột trái (Vòng quay), Cột phải (Danh sách quán) -->
+    <div class="content-grid">
+      <!-- Cột trái: Vòng quay may mắn (Phase 4) -->
+      <aside class="wheel-column" aria-label="Khu vực vòng quay">
+        <div class="wheel-card">
+          <!-- Wheel Header -->
+          <div class="wheel-header">
+            <div>
+              <h2 class="wheel-title">🎡 Vòng quay may mắn</h2>
+              <span class="wheel-subtitle">Hôm nay Hưng & Ngân ăn gì?</span>
+            </div>
+            <button id="shuffleWheelBtn" class="btn btn-secondary btn-sm" type="button" title="Xáo lại danh sách trong vòng quay">
+              <span>🎲</span>
+              <span>Xáo lại</span>
+            </button>
+          </div>
+
+          <!-- Wheel Stage (Canvas + Pointer Indicator) -->
+          <div class="wheel-stage">
+            <!-- Kim chỉ cố định ở đỉnh (top pointer pointing down) -->
+            <div class="wheel-pointer" aria-hidden="true"></div>
+            <!-- Canvas vòng quay -->
+            <canvas id="wheelCanvas" width="300" height="300"></canvas>
+          </div>
+
+          <!-- Wheel Controls & Status -->
+          <div class="wheel-controls">
+            <button id="spinWheelBtn" class="btn btn-primary btn-spin" type="button">
+              QUAY NGẪU NHIÊN!
+            </button>
+            <div id="wheelStatusHint" class="wheel-status-hint">
+              Đang chuẩn bị vòng quay...
+            </div>
+            <div id="tempExcludedBanner" class="temp-excluded-banner" style="display: none;">
+              <span>Đã loại tạm: <strong id="tempExcludedCount">0</strong> quán</span>
+              <button id="restoreExcludedBtn" class="restore-excluded-btn" type="button">[Khôi phục]</button>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Cột phải: Danh sách quán ăn dạng Grid thẻ -->
+      <section class="list-column" aria-label="Danh sách quán ăn">
+        <div class="list-header-row">
+          <div class="list-title-wrap">
+            <h2 class="list-title">Danh sách quán ăn</h2>
+            <span id="listCityBadge" class="list-city-badge">Hà Nội</span>
+          </div>
+
+          <!-- Nút "+ Thêm quán" (Phase 2) -->
+          <button id="addRestaurantBtn" class="btn btn-primary" type="button">
+            <span>+</span>
+            <span>Thêm quán</span>
+          </button>
+        </div>
+
+        <!-- BỘ LỌC & TÌM KIẾM (Phase 3) -->
+        <div class="filter-panel" aria-label="Bộ lọc và tìm kiếm quán ăn">
+          <!-- 1. Ô tìm kiếm -->
+          <div class="search-input-wrap">
+            <span class="search-icon" aria-hidden="true">🔍</span>
+            <input type="text" id="searchInput" class="search-input" placeholder="Tìm kiếm theo tên quán, địa chỉ, nhận xét... (Phím tắt /)" autocomplete="off">
+            <div class="search-actions">
+              <button id="searchClearBtn" class="search-clear-btn" type="button" title="Xóa tìm kiếm">✕</button>
+              <span class="search-shortcut-pill">/</span>
+            </div>
+          </div>
+
+          <!-- 2. Thể loại chips -->
+          <div class="category-chips-wrap" id="categoryChipsContainer">
+            <button class="filter-chip cat-filter-chip active" type="button" data-category="all">Tất cả</button>
+            <button class="filter-chip cat-filter-chip" type="button" data-category="Bún/Phở">Bún/Phở</button>
+            <button class="filter-chip cat-filter-chip" type="button" data-category="Cơm">Cơm</button>
+            <button class="filter-chip cat-filter-chip" type="button" data-category="Lẩu">Lẩu</button>
+            <button class="filter-chip cat-filter-chip" type="button" data-category="Nướng">Nướng</button>
+            <button class="filter-chip cat-filter-chip" type="button" data-category="Ăn vặt">Ăn vặt</button>
+            <button class="filter-chip cat-filter-chip" type="button" data-category="Cafe">Cafe</button>
+            <button class="filter-chip cat-filter-chip" type="button" data-category="Khác">Khác</button>
+          </div>
+
+          <!-- 3. Hàng điều khiển phụ: Trạng thái, 4★, Giá, Reset -->
+          <div class="filter-controls-row">
+            <div class="filter-group-left">
+              <!-- Trạng thái -->
+              <div class="segmented-control" role="group" aria-label="Lọc theo trạng thái">
+                <button class="segmented-btn status-filter-btn active" type="button" data-status="all">Tất cả</button>
+                <button class="segmented-btn status-filter-btn" type="button" data-status="eaten">Đã ăn 😋</button>
+                <button class="segmented-btn status-filter-btn" type="button" data-status="wishlist">Muốn thử ✨</button>
+              </div>
+
+              <!-- Công tắc Cả hai từ 4 sao -->
+              <label class="switch-wrap" title="Chỉ hiện quán cả Hưng & Ngân đều chấm từ 4 sao trở lên (loại quán chưa chấm)">
+                <input type="checkbox" id="fourStarsToggle" class="switch-input">
+                <span>Cả hai từ 4★ trở lên</span>
+              </label>
+
+              <!-- Thanh trượt giá tối đa -->
+              <div id="priceFilterContainer" class="price-slider-wrap">
+                <span class="price-slider-label">Giá tối đa:</span>
+                <input type="range" id="priceSlider" class="price-slider" min="0" max="1000000" step="5000">
+                <span id="priceSliderValue" class="price-slider-val">—</span>
+              </div>
+            </div>
+
+            <!-- Nút Xóa bộ lọc -->
+            <button id="resetFiltersBtn" class="reset-filters-btn" type="button" title="Đặt lại toàn bộ tiêu chí lọc">
+              <span>✕</span>
+              <span>Xóa bộ lọc</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Vùng hiển thị danh sách / trạng thái -->
+        <div id="restaurantsContainer" class="restaurants-grid">
+          <!-- Sẽ được vẽ động bằng JavaScript -->
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- ==========================================================================
+       FOOTER (Export/Import và Lần backup gần nhất - Phase 5 Hoàn thiện)
+       ========================================================================== -->
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div class="backup-status">
+        <span class="backup-bullet"></span>
+        <span id="lastBackupLabel">Lần backup gần nhất: Chưa backup</span>
+      </div>
+
+      <div class="footer-actions">
+        <button id="exportBtn" class="btn btn-secondary" type="button" title="Xuất toàn bộ dữ liệu ra tệp JSON sao lưu">
+          📤 Xuất dữ liệu
+        </button>
+        <button id="importBtn" class="btn btn-secondary" type="button" title="Nhập dữ liệu từ tệp JSON sao lưu">
+          📥 Nhập dữ liệu
+        </button>
+        <input type="file" id="importFileInput" accept=".json,application/json" class="sr-only" style="display: none;" aria-hidden="true">
+      </div>
+
+      <div class="footer-brand-note">
+        HEN 🐔 · Hưng & Ngân Eat the World
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       MODAL: FORM THÊM / SỬA QUÁN ĂN (Phase 2)
+       ========================================================================== -->
+  <div id="restaurantModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="restaurantModalTitle">
+    <div class="modal-box modal-large">
+      <div class="modal-header">
+        <h3 id="restaurantModalTitle" class="modal-title">Thêm quán mới</h3>
+        <button id="closeRestaurantModalBtn" class="btn-icon" type="button" aria-label="Đóng form">✕</button>
+      </div>
+
+      <form id="restaurantForm" novalidate>
+        <div class="form-grid">
+          <div class="form-group col-span-2">
+            <label class="form-label" for="formName">Tên quán ăn <span class="required">*</span></label>
+            <input type="text" id="formName" class="form-control" placeholder="VD: Phở Thìn Lò Đúc, Bún Đậu Cô Hạnh..." required autocomplete="off">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="formCategory">Thể loại quán</label>
+            <select id="formCategory" class="form-control">
+              <option value="Bún/Phở">Bún/Phở</option>
+              <option value="Cơm">Cơm</option>
+              <option value="Lẩu">Lẩu</option>
+              <option value="Nướng">Nướng</option>
+              <option value="Ăn vặt">Ăn vặt</option>
+              <option value="Cafe">Cafe</option>
+              <option value="Khác">Khác</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="formStatus">Trạng thái</label>
+            <select id="formStatus" class="form-control">
+              <option value="eaten">Đã ăn 😋</option>
+              <option value="wishlist">Muốn thử ✨</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="formPrice">Mức giá trung bình (VNĐ)</label>
+            <input type="number" id="formPrice" class="form-control" placeholder="VD: 50000 (để trống nếu chưa rõ)" min="0" step="1000">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="formAddress">Địa chỉ quán</label>
+            <input type="text" id="formAddress" class="form-control" placeholder="VD: 13 Lò Đúc, Hai Bà Trưng..." autocomplete="off">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="formRatingHung">Đánh giá của Hưng</label>
+            <select id="formRatingHung" class="form-control">
+              <option value="">Chưa chấm</option>
+              <option value="1">1 sao ⭐</option>
+              <option value="2">2 sao ⭐⭐</option>
+              <option value="3">3 sao ⭐⭐⭐</option>
+              <option value="4">4 sao ⭐⭐⭐⭐</option>
+              <option value="5">5 sao ⭐⭐⭐⭐⭐</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="formRatingNgan">Đánh giá của Ngân</label>
+            <select id="formRatingNgan" class="form-control">
+              <option value="">Chưa chấm</option>
+              <option value="1">1 sao ⭐</option>
+              <option value="2">2 sao ⭐⭐</option>
+              <option value="3">3 sao ⭐⭐⭐</option>
+              <option value="4">4 sao ⭐⭐⭐⭐</option>
+              <option value="5">5 sao ⭐⭐⭐⭐⭐</option>
+            </select>
+          </div>
+
+          <div class="form-group col-span-2">
+            <label class="form-label" for="formReview">Nhận xét / Ghi chú</label>
+            <textarea id="formReview" class="form-control" placeholder="Cảm nhận vị món ăn, không gian, lưu ý khi gọi món..."></textarea>
+          </div>
+
+          <div class="form-group col-span-2">
+            <label class="form-label">Hình ảnh quán (Ảnh Món / Menu)</label>
+            <div id="imageDropzone" class="image-dropzone" tabindex="0" role="button" aria-label="Tải ảnh lên">
+              <span class="dropzone-icon">📷</span>
+              <span class="dropzone-text">Bấm để chọn ảnh, hoặc kéo thả ảnh vào đây</span>
+              <span class="dropzone-subtext">Hỗ trợ dán ảnh trực tiếp từ clipboard (Ctrl+V) · Đổi loại và xem trước bên dưới</span>
+              <input type="file" id="imageFileInput" accept="image/*" multiple style="display: none;">
+            </div>
+            <div id="imagePreviewContainer" class="image-previews-grid"></div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button id="cancelRestaurantBtn" class="btn btn-secondary" type="button">Hủy</button>
+          <button id="saveRestaurantBtn" class="btn btn-primary" type="submit">Lưu quán</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL: CẢNH BÁO TRÙNG LẶP (Phase 3)
+       ========================================================================== -->
+  <div id="duplicateWarningModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="dupModalTitle">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="dupModalTitle" class="modal-title">⚠️ Cảnh báo trùng quán</h3>
+        <button id="closeDupModalBtn" class="btn-icon" type="button" aria-label="Đóng cảnh báo">✕</button>
+      </div>
+
+      <div id="dupModalBody" class="dup-warning-box"></div>
+
+      <p style="font-size: 13px; color: var(--text-muted); margin-top: -6px; line-height: 1.4;">
+        Nếu đây là quán theo chuỗi khác chi nhánh hoặc bạn vẫn muốn lưu, bạn có thể chọn "Vẫn lưu".
+      </p>
+
+      <div class="modal-footer">
+        <button id="dupBackBtn" class="btn btn-secondary" type="button">Quay lại sửa</button>
+        <button id="dupProceedBtn" class="btn btn-primary" type="button">Vẫn lưu</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL: KẾT QUẢ VÒNG QUAY MAY MẮN (Phase 4)
+       ========================================================================== -->
+  <div id="wheelResultModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="wheelResultTitle">
+    <div class="modal-box" style="text-align: center; align-items: center; max-width: 460px;">
+      <div style="font-size: 48px; line-height: 1;">🎉</div>
+      <h3 id="wheelResultTitle" class="modal-title" style="font-size: 18px; color: var(--primary);">
+        Món ngon hôm nay cho Hưng & Ngân:
+      </h3>
+
+      <div class="wheel-result-card" style="width: 100%; padding: 18px; background: var(--bg-surface-subtle); border-radius: var(--radius-md); border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 8px;">
+        <h4 id="resultRestaurantName" style="font-size: 22px; font-weight: 800; color: var(--text-main); word-break: break-word;">Tên quán</h4>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;">
+          <span id="resultCategoryBadge" class="card-category-badge cat-bun-pho">Thể loại</span>
+          <span id="resultPrice" style="font-weight: 700; color: var(--primary); font-size: 14px;">50.000 đ</span>
+        </div>
+        <div id="resultAddress" style="font-size: 13px; color: var(--text-muted); word-break: break-word;">📍 Địa chỉ</div>
+      </div>
+
+      <div class="modal-footer" style="width: 100%; justify-content: center; gap: 12px; border-top: none; padding-top: 8px;">
+        <button id="closeResultModalBtn" class="btn btn-secondary" type="button">Đóng</button>
+        <button id="spinAnotherBtn" class="btn btn-primary" type="button">Quay lại món khác</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL: LIGHTBOX XEM ẢNH (Phase 2)
+       ========================================================================== -->
+  <div id="lightboxModal" class="lightbox-backdrop" role="dialog" aria-modal="true" aria-label="Xem ảnh quán ăn">
+    <div class="lightbox-topbar">
+      <div class="lightbox-title-area">
+        <span id="lightboxRestaurantName" class="lightbox-restaurant-name">Tên quán</span>
+        <span id="lightboxTypeBadge" class="lightbox-type-pill">Ảnh Món</span>
+        <span id="lightboxCounter" class="lightbox-counter">1 / 1</span>
+      </div>
+      <button id="lightboxCloseBtn" class="lightbox-close-btn" type="button" aria-label="Đóng xem ảnh">✕</button>
+    </div>
+
+    <div class="lightbox-content-area">
+      <button id="lightboxPrevBtn" class="lightbox-nav-btn prev" type="button" aria-label="Ảnh trước">◀</button>
+      <img id="lightboxMainImg" class="lightbox-main-img" src="" alt="Ảnh quán ăn">
+      <button id="lightboxNextBtn" class="lightbox-nav-btn next" type="button" aria-label="Ảnh kế tiếp">▶</button>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL: ĐỔI THÀNH PHỐ
+       ========================================================================== -->
+  <div id="cityModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="cityModalTitle">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="cityModalTitle" class="modal-title">Chọn thành phố khám phá</h3>
+        <button id="closeCityModalBtn" class="btn-icon" type="button" aria-label="Đóng modal">✕</button>
+      </div>
+      <p style="color: var(--text-muted); font-size: 14px;">
+        Chọn khu vực bạn muốn xem danh sách quán và thống kê ẩm thực:
+      </p>
+      <div class="city-picker-options">
+        <button id="modalSelectHN" class="city-card-btn" type="button">
+          <span class="city-card-pin">📍</span>
+          <span class="city-card-name">Hà Nội</span>
+          <span class="city-card-code">Khu vực HN</span>
+        </button>
+        <button id="modalSelectBG" class="city-card-btn" type="button">
+          <span class="city-card-pin">📍</span>
+          <span class="city-card-name">Bắc Giang</span>
+          <span class="city-card-code">Khu vực BG</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL: NHẬP DỮ LIỆU SAO LƯU (Phase 5)
+       ========================================================================== -->
+  <div id="importModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="importModalTitle">
+    <div class="modal-box" style="max-width: 520px;">
+      <div class="modal-header">
+        <h3 id="importModalTitle" class="modal-title">📥 Nhập dữ liệu sao lưu (JSON)</h3>
+        <button id="closeImportModalBtn" class="btn-icon" type="button" aria-label="Đóng">✕</button>
+      </div>
+
+      <div class="modal-body" style="padding: 16px 0;">
+        <!-- Vùng kéo thả / chọn file -->
+        <div id="importDropZone" class="import-drop-zone">
+          <div style="font-size: 36px; margin-bottom: 8px;">📄</div>
+          <div style="font-weight: 600; color: var(--text-main); font-size: 15px; margin-bottom: 4px;">Kéo thả tệp JSON vào đây hoặc bấm để chọn</div>
+          <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">Chỉ chấp nhận tệp sao lưu chuẩn của HEN (.json)</div>
+          <button type="button" class="btn btn-secondary" style="pointer-events: none;">Chọn tệp từ máy...</button>
+        </div>
+
+        <div id="importFileDetails" style="display: none; margin-top: 14px; padding: 12px 14px; background: var(--bg-surface-subtle); border: 1px solid var(--border-color); border-radius: var(--radius-sm); font-size: 14px;">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <div style="font-weight: 600; color: var(--text-main); word-break: break-all;" id="importFileName">tệp.json</div>
+            <button type="button" id="clearSelectedFileBtn" class="btn-icon" style="font-size: 13px; color: var(--text-faint); margin-left: 8px;" title="Chọn lại tệp khác">✕</button>
+          </div>
+          <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px;" id="importFileStats">Đang đọc thông tin...</div>
+        </div>
+
+        <!-- Tùy chọn trùng lặp -->
+        <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border-color);">
+          <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; user-select: none;">
+            <input type="checkbox" id="importSkipDuplicates" checked style="width: 18px; height: 18px; accent-color: var(--primary); margin-top: 2px;">
+            <div>
+              <div style="font-size: 14px; font-weight: 600; color: var(--text-main);">Bỏ qua các quán trùng lặp (khuyên dùng)</div>
+              <div style="font-size: 12.5px; color: var(--text-muted); margin-top: 2px;">Xét trùng theo ID gốc của quán trong cơ sở dữ liệu. Nếu bỏ tích, các quán trùng sẽ được ghi đè và làm mới toàn bộ ảnh.</div>
+            </div>
+          </label>
+        </div>
+
+        <!-- Tiến trình nhập -->
+        <div id="importProgressContainer" style="display: none; margin-top: 18px;">
+          <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 500; margin-bottom: 6px;">
+            <span id="importStatusText" style="color: var(--text-main);">Đang xử lý dữ liệu...</span>
+            <span id="importPercentText" style="color: var(--primary); font-weight: 600;">0%</span>
+          </div>
+          <div style="width: 100%; height: 10px; background: var(--bg-surface-subtle); border-radius: 5px; overflow: hidden; border: 1px solid var(--border-color);">
+            <div id="importProgressBar" style="width: 0%; height: 100%; background: var(--primary); transition: width 0.15s ease;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 10px; padding-top: 14px; border-top: 1px solid var(--border-color);">
+        <button type="button" class="btn btn-secondary" id="cancelImportModalBtn">Hủy</button>
+        <button type="button" class="btn btn-primary" id="startImportBtn" disabled>Bắt đầu nhập dữ liệu</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL: XÁC NHẬN GHI ĐÈ DỮ LIỆU (Phase 5)
+       ========================================================================== -->
+  <div id="overwriteConfirmModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="overwriteConfirmTitle">
+    <div class="modal-box" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3 id="overwriteConfirmTitle" class="modal-title">⚠️ Xác nhận ghi đè dữ liệu</h3>
+        <button id="closeOverwriteModalBtn" class="btn-icon" type="button" aria-label="Đóng">✕</button>
+      </div>
+      <div class="modal-body" style="padding: 16px 0;">
+        <p id="overwriteConfirmMsg" style="font-size: 15px; font-weight: 600; line-height: 1.5; color: var(--text-main); margin-bottom: 8px;">
+          Sẽ ghi đè N quán hiện có.
+        </p>
+        <p style="font-size: 13.5px; color: var(--text-muted); line-height: 1.45;">
+          Khi ghi đè, toàn bộ ảnh cũ của các quán này trong cơ sở dữ liệu sẽ bị xóa và thay bằng ảnh trong bản sao lưu để đảm bảo không bị nhân đôi ảnh.
+        </p>
+      </div>
+      <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 10px; padding-top: 14px; border-top: 1px solid var(--border-color);">
+        <button type="button" class="btn btn-secondary" id="cancelOverwriteBtn">Hủy bỏ</button>
+        <button type="button" class="btn btn-danger" id="confirmOverwriteBtn">Đồng ý ghi đè</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MÀN HÌNH WELCOME (Phủ toàn bộ nếu chưa có hen_city trong localStorage)
+       ========================================================================== -->
+  <div id="welcomeOverlay" class="welcome-overlay" style="display: none;" role="dialog" aria-modal="true">
+    <div class="welcome-card">
+      <div class="welcome-logo">🐔</div>
+      <div>
+        <h2 class="welcome-title">Chào mừng đến với HEN</h2>
+        <p class="welcome-desc">Hưng & Ngân Eat the World · Sổ tay lưu giữ và quay chọn quán ăn offline cho hai đứa mình.</p>
+      </div>
+      <p class="welcome-prompt">Hãy chọn thành phố bắt đầu:</p>
+      <div class="city-picker-options" style="width: 100%;">
+        <button id="welcomeSelectHN" class="city-card-btn" type="button">
+          <span class="city-card-pin">📍</span>
+          <span class="city-card-name">Hà Nội</span>
+          <span class="city-card-code">Khu vực HN</span>
+        </button>
+        <button id="welcomeSelectBG" class="city-card-btn" type="button">
+          <span class="city-card-pin">📍</span>
+          <span class="city-card-name">Bắc Giang</span>
+          <span class="city-card-code">Khu vực BG</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       TOAST CONTAINER
+       ========================================================================== -->
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <!-- ==========================================================================
+       LOGIC JAVASCRIPT THUẦN (100% OFFLINE, KHÔNG CDN, KHÔNG THƯ VIỆN NGOÀI)
+       ========================================================================== -->
+  <script>
+    'use strict';
+
+    /* ==========================================================================
+       HẰNG SỐ & BIẾN TOÀN CỤC
+       ========================================================================== */
+    const DB_NAME = 'hen_app_db';
+    const DB_VERSION = 1;
+    const STORAGE_KEY_CITY = 'hen_city';
+    const STORAGE_KEY_THEME = 'hen_theme';
+    const STORAGE_KEY_BACKUP = 'hen_lastBackup';
+
+    const CATEGORIES = ["Bún/Phở", "Cơm", "Lẩu", "Nướng", "Ăn vặt", "Cafe", "Khác"];
+
+    const CITY_NAMES = {
+      'HN': 'Hà Nội',
+      'BG': 'Bắc Giang'
+    };
+
+    // Bảng màu 16 ô ấm áp, rực rỡ, tương phản tốt của vòng quay
+    const WHEEL_COLORS = [
+      '#E27D60', '#E8A87C', '#C38D9E', '#41B3A3',
+      '#E09F3E', '#85586F', '#D96B43', '#B56576',
+      '#6D597A', '#355070', '#EAAC8B', '#9A8C98',
+      '#C9A66B', '#8E7970', '#B38867', '#D4A373'
+    ];
+
+    let dbInstance = null;
+    let currentCity = 'HN';
+
+    // Dữ liệu quán gốc của thành phố hiện tại (chưa qua bộ lọc, dùng cho thống kê & bộ lọc)
+    let allCityRestaurants = [];
+
+    // Danh sách quán đang hiển thị sau bộ lọc (nguồn dữ liệu duy nhất cho Phase 4 Vòng quay)
+    window.currentDisplayedRestaurants = [];
+
+    // Quản lý trạng thái bộ lọc (Phase 3)
+    let currentFilterSearch = '';
+    let currentFilterCategory = 'all';
+    let currentFilterStatus = 'all';
+    let filterFourStarsOnly = false;
+    let currentFilterPrice = null;
+    let priceSliderMin = null;
+    let priceSliderMax = null;
+
+    // Quản lý Vòng quay may mắn (Phase 4)
+    let currentWheelItems = [];          // Danh sách tối đa 16 quán đang có trên vòng quay
+    let tempExcludedIds = new Set();      // Quán đang bị loại tạm qua "Quay lại món khác"
+    let currentWheelRotation = 0;        // Góc quay tích lũy (độ)
+    let isSpinning = false;              // Trạng thái đang quay
+    let currentWinningRestaurant = null; // Quán trúng thưởng gần nhất
+    let wheelDebounceTimer = null;       // Timer debounce 300ms khi gõ tìm kiếm/bộ lọc
+
+    // Quản lý ObjectURL của card thumbnails để revoke giải phóng bộ nhớ
+    let activeCardUrls = [];
+
+    // Quản lý trạng thái Form
+    let editingRestaurantId = null;
+    let formNewImages = [];
+    let formExistingImages = [];
+
+    // Quản lý Lightbox
+    let lightboxImages = [];
+    let lightboxCurrentIndex = 0;
+    let lightboxActiveUrls = [];
+
+    // Quản lý Xóa và Hoàn tác (Soft Delete Map: id -> { restaurant, timerId, toastEl })
+    const pendingDeletions = new Map();
+
+    /* ==========================================================================
+       LUẬT THÉP 5: HÀM NORMALIZE(s) DÙNG CHUNG
+       Chuyển chữ thường, normalize NFD, bỏ dấu U+0300-U+036F, đổi đ thành d,
+       gộp khoảng trắng thừa, trim.
+       ========================================================================== */
+    function normalize(s) {
+      if (!s) return '';
+      return s
+        .toString()
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[đĐ]/g, 'd')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function getCategoryClass(cat) {
+      switch (cat) {
+        case 'Bún/Phở': return 'cat-bun-pho';
+        case 'Cơm': return 'cat-com';
+        case 'Lẩu': return 'cat-lau';
+        case 'Nướng': return 'cat-nuong';
+        case 'Ăn vặt': return 'cat-an-vat';
+        case 'Cafe': return 'cat-cafe';
+        default: return 'cat-khac';
+      }
+    }
+
+    /* ==========================================================================
+       TOAST THÔNG BÁO TIẾNG VIỆT & HỖ TRỢ HOÀN TÁC
+       ========================================================================== */
+    function showToast(message, type = 'info', duration = 3500) {
+      const container = document.getElementById('toastContainer');
+      if (!container) return null;
+
+      const toast = document.createElement('div');
+      toast.className = `toast ${type === 'error' ? 'toast-error' : type === 'success' ? 'toast-success' : ''}`;
+
+      const icon = document.createElement('span');
+      icon.textContent = type === 'error' ? '⚠️' : type === 'success' ? '✅' : '🐔';
+      toast.appendChild(icon);
+
+      const msgSpan = document.createElement('span');
+      msgSpan.textContent = message;
+      toast.appendChild(msgSpan);
+
+      container.appendChild(toast);
+
+      const timerId = setTimeout(() => {
+        dismissToast(toast);
+      }, duration);
+
+      toast._timerId = timerId;
+      return toast;
+    }
+
+    function dismissToast(toast) {
+      if (!toast || !toast.parentNode) return;
+      if (toast._timerId) clearTimeout(toast._timerId);
+      toast.classList.add('toast-fadeout');
+      setTimeout(() => {
+        if (toast.parentNode) {
+          toast.parentNode.removeChild(toast);
+        }
+      }, 250);
+    }
+
+    /* ==========================================================================
+       LUẬT THÉP 2: DARK / LIGHT MODE
+       ========================================================================== */
+    function initTheme() {
+      const savedTheme = localStorage.getItem(STORAGE_KEY_THEME);
+      if (savedTheme === 'dark' || savedTheme === 'light') {
+        applyTheme(savedTheme);
+      } else {
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        applyTheme(prefersDark ? 'dark' : 'light');
+      }
+
+      if (window.matchMedia) {
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+          if (!localStorage.getItem(STORAGE_KEY_THEME)) {
+            applyTheme(e.matches ? 'dark' : 'light');
+          }
+        });
+      }
+
+      const toggleBtn = document.getElementById('themeToggleBtn');
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          const current = document.documentElement.getAttribute('data-theme') || 'light';
+          const next = current === 'dark' ? 'light' : 'dark';
+          applyTheme(next);
+          localStorage.setItem(STORAGE_KEY_THEME, next);
+          // Vẽ lại vòng quay để đồng bộ màu viền/chữ nếu cần
+          drawWheel(currentWheelItems);
+        });
+      }
+    }
+
+    function applyTheme(theme) {
+      if (theme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.getElementById('themeIconSun').style.display = 'block';
+        document.getElementById('themeIconMoon').style.display = 'none';
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        document.getElementById('themeIconSun').style.display = 'none';
+        document.getElementById('themeIconMoon').style.display = 'block';
+      }
+    }
+
+    /* ==========================================================================
+       LUẬT THÉP 3: KHỞI TẠO INDEXEDDB hen_app_db version 1
+       ========================================================================== */
+    function initIndexedDB() {
+      return new Promise((resolve, reject) => {
+        try {
+          if (navigator.storage && navigator.storage.persist) {
+            navigator.storage.persist().catch(() => {});
+          }
+
+          const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+          request.onupgradeneeded = (event) => {
+            const db = event.target.result;
+
+            if (!db.objectStoreNames.contains('restaurants')) {
+              db.createObjectStore('restaurants', { keyPath: 'id' });
+            }
+
+            if (!db.objectStoreNames.contains('images')) {
+              const imageStore = db.createObjectStore('images', { keyPath: 'imageId' });
+              imageStore.createIndex('restaurantId', 'restaurantId', { unique: false });
+            }
+          };
+
+          request.onsuccess = (event) => {
+            dbInstance = event.target.result;
+            resolve(dbInstance);
+          };
+
+          request.onerror = (event) => {
+            const err = event.target.error || new Error('Không thể mở IndexedDB');
+            showToast('Lỗi khi mở cơ sở dữ liệu IndexedDB: ' + (err.message || ''), 'error');
+            reject(err);
+          };
+        } catch (err) {
+          showToast('Lỗi khởi tạo IndexedDB: ' + (err.message || ''), 'error');
+          reject(err);
+        }
+      });
+    }
+
+    /* ==========================================================================
+       LẤY DỮ LIỆU TỪ INDEXEDDB
+       ========================================================================== */
+    function getCardCoverMeta(restaurantId) {
+      return new Promise((resolve) => {
+        if (!dbInstance) {
+          resolve({ coverBlob: null, imageCount: 0 });
+          return;
+        }
+        try {
+          const tx = dbInstance.transaction(['images'], 'readonly');
+          const store = tx.objectStore('images');
+          const index = store.index('restaurantId');
+          const countReq = index.count(IDBKeyRange.only(restaurantId));
+
+          countReq.onsuccess = () => {
+            const totalCount = countReq.result || 0;
+            if (totalCount === 0) {
+              resolve({ coverBlob: null, imageCount: 0 });
+              return;
+            }
+
+            const cursorReq = index.openCursor(IDBKeyRange.only(restaurantId));
+            let fallbackBlob = null;
+
+            cursorReq.onsuccess = (e) => {
+              const cursor = e.target.result;
+              if (!cursor) {
+                resolve({ coverBlob: fallbackBlob, imageCount: totalCount });
+                return;
+              }
+              const rec = cursor.value;
+              if (rec.type === 'food') {
+                resolve({ coverBlob: rec.thumb || rec.blob, imageCount: totalCount });
+                return;
+              }
+              if (!fallbackBlob) {
+                fallbackBlob = rec.thumb || rec.blob;
+              }
+              cursor.continue();
+            };
+
+            cursorReq.onerror = () => {
+              resolve({ coverBlob: fallbackBlob, imageCount: totalCount });
+            };
+          };
+
+          countReq.onerror = () => {
+            resolve({ coverBlob: null, imageCount: 0 });
+          };
+        } catch (_) {
+          resolve({ coverBlob: null, imageCount: 0 });
+        }
+      });
+    }
+
+    function getImagesByRestaurantId(restaurantId) {
+      return new Promise((resolve) => {
+        if (!dbInstance) {
+          resolve([]);
+          return;
+        }
+        try {
+          const tx = dbInstance.transaction(['images'], 'readonly');
+          const store = tx.objectStore('images');
+          const index = store.index('restaurantId');
+          const req = index.getAll(IDBKeyRange.only(restaurantId));
+
+          req.onsuccess = () => {
+            const list = req.result || [];
+            list.sort((a, b) => new Date(a.createdAt || 0) - new Date(b.createdAt || 0));
+            resolve(list);
+          };
+
+          req.onerror = () => {
+            showToast('Lỗi khi đọc ảnh của quán', 'error');
+            resolve([]);
+          };
+        } catch (err) {
+          showToast('Lỗi: ' + (err.message || ''), 'error');
+          resolve([]);
+        }
+      });
+    }
+
+    function getRestaurantsByCity(city) {
+      return new Promise((resolve, reject) => {
+        if (!dbInstance) {
+          resolve([]);
+          return;
+        }
+        try {
+          const transaction = dbInstance.transaction(['restaurants'], 'readonly');
+          const store = transaction.objectStore('restaurants');
+          const request = store.getAll();
+
+          request.onsuccess = () => {
+            const all = request.result || [];
+            const filtered = all
+              .filter(r => r.city === city && !pendingDeletions.has(r.id))
+              .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+            resolve(filtered);
+          };
+
+          request.onerror = (event) => {
+            const err = event.target.error;
+            showToast('Lỗi khi tải danh sách quán ăn', 'error');
+            reject(err);
+          };
+        } catch (err) {
+          showToast('Lỗi đọc dữ liệu: ' + (err.message || ''), 'error');
+          reject(err);
+        }
+      });
+    }
+
+    /* ==========================================================================
+       CẬP NHẬT THỐNG KÊ ĐẦU TRANG (TOÀN BỘ QUÁN TRONG CITY, KHÔNG BỊ LỌC)
+       ========================================================================== */
+    function updateStats(restaurants) {
+      const total = restaurants.length;
+      let eatenCount = 0;
+      let wishlistCount = 0;
+      let bestRestaurant = null;
+      let maxScore = -1;
+
+      restaurants.forEach(r => {
+        if (r.status === 'eaten') eatenCount++;
+        if (r.status === 'wishlist') wishlistCount++;
+
+        let score = null;
+        const h = (typeof r.ratingHung === 'number') ? r.ratingHung : null;
+        const n = (typeof r.ratingNgan === 'number') ? r.ratingNgan : null;
+
+        if (h !== null && n !== null) {
+          score = (h + n) / 2;
+        } else if (h !== null) {
+          score = h;
+        } else if (n !== null) {
+          score = n;
+        }
+
+        if (score !== null && score > maxScore) {
+          maxScore = score;
+          bestRestaurant = {
+            name: r.name || 'Không tên',
+            score: score
+          };
+        }
+      });
+
+      document.getElementById('statTotal').textContent = total.toString();
+      document.getElementById('statEaten').textContent = eatenCount.toString();
+      document.getElementById('statWishlist').textContent = wishlistCount.toString();
+
+      const topRatedEl = document.getElementById('statTopRated');
+      if (bestRestaurant && maxScore > 0) {
+        const formattedScore = Number.isInteger(bestRestaurant.score)
+          ? bestRestaurant.score.toString()
+          : bestRestaurant.score.toFixed(1);
+        const text = `${bestRestaurant.name} (${formattedScore} ⭐)`;
+        topRatedEl.textContent = text;
+        topRatedEl.title = text;
+      } else {
+        topRatedEl.textContent = '—';
+        topRatedEl.title = 'Chưa có quán nào được chấm điểm';
+      }
+    }
+
+    /* ==========================================================================
+       PHASE 3: BỘ LỌC, TÌM KIẾM & RENDER DANH SÁCH
+       ========================================================================== */
+    function initPriceSliderFromData(restaurants) {
+      const container = document.getElementById('priceFilterContainer');
+      const slider = document.getElementById('priceSlider');
+      const valLabel = document.getElementById('priceSliderValue');
+
+      const prices = restaurants
+        .map(r => r.price)
+        .filter(p => typeof p === 'number' && !isNaN(p));
+
+      const uniquePrices = Array.from(new Set(prices));
+
+      if (uniquePrices.length <= 1) {
+        container.style.display = 'none';
+        priceSliderMin = null;
+        priceSliderMax = null;
+        currentFilterPrice = null;
+      } else {
+        container.style.display = 'inline-flex';
+        priceSliderMin = Math.min(...uniquePrices);
+        priceSliderMax = Math.max(...uniquePrices);
+
+        slider.min = priceSliderMin;
+        slider.max = priceSliderMax;
+
+        if (currentFilterPrice === null || currentFilterPrice > priceSliderMax || currentFilterPrice < priceSliderMin) {
+          currentFilterPrice = priceSliderMax;
+        }
+
+        slider.value = currentFilterPrice;
+        valLabel.textContent = currentFilterPrice.toLocaleString('vi-VN') + ' đ';
+      }
+    }
+
+    function checkHasActiveFilters() {
+      const isSearchActive = currentFilterSearch.trim().length > 0;
+      const isCatActive = currentFilterCategory !== 'all';
+      const isStatusActive = currentFilterStatus !== 'all';
+      const isFourStarsActive = filterFourStarsOnly === true;
+      const isPriceActive = (priceSliderMax !== null && currentFilterPrice !== null && currentFilterPrice < priceSliderMax);
+
+      return isSearchActive || isCatActive || isStatusActive || isFourStarsActive || isPriceActive;
+    }
+
+    function updateResetFilterButtonVisibility() {
+      const btn = document.getElementById('resetFiltersBtn');
+      if (btn) {
+        btn.classList.toggle('visible', checkHasActiveFilters());
+      }
+    }
+
+    function applyFiltersAndRender() {
+      const normSearch = normalize(currentFilterSearch);
+
+      const filtered = allCityRestaurants.filter(r => {
+        if (normSearch) {
+          const nameNorm = normalize(r.name);
+          const addrNorm = normalize(r.address || '');
+          const revNorm = normalize(r.review || '');
+          const matchSearch = nameNorm.includes(normSearch) || addrNorm.includes(normSearch) || revNorm.includes(normSearch);
+          if (!matchSearch) return false;
+        }
+
+        if (currentFilterCategory !== 'all' && r.category !== currentFilterCategory) {
+          return false;
+        }
+
+        if (currentFilterStatus !== 'all' && r.status !== currentFilterStatus) {
+          return false;
+        }
+
+        if (filterFourStarsOnly) {
+          if (typeof r.ratingHung !== 'number' || r.ratingHung < 4 ||
+              typeof r.ratingNgan !== 'number' || r.ratingNgan < 4) {
+            return false;
+          }
+        }
+
+        if (currentFilterPrice !== null && typeof r.price === 'number') {
+          if (r.price > currentFilterPrice) {
+            return false;
+          }
+        }
+
+        return true;
+      });
+
+      window.currentDisplayedRestaurants = filtered;
+
+      updateResetFilterButtonVisibility();
+      renderFilteredResults(filtered);
+
+      // Cập nhật Vòng quay may mắn với Debounce 300ms (Phase 4)
+      scheduleWheelUpdate();
+    }
+
+    async function renderFilteredResults(filtered) {
+      const container = document.getElementById('restaurantsContainer');
+
+      if (!filtered || filtered.length === 0) {
+        if (activeCardUrls.length > 0) {
+          activeCardUrls.forEach(url => URL.revokeObjectURL(url));
+          activeCardUrls = [];
+        }
+
+        while (container.firstChild) {
+          container.removeChild(container.firstChild);
+        }
+
+        const isFiltered = checkHasActiveFilters();
+
+        const emptyPanel = document.createElement('div');
+        emptyPanel.className = 'state-panel';
+        emptyPanel.style.gridColumn = '1 / -1';
+
+        const icon = document.createElement('div');
+        icon.className = 'state-icon';
+        icon.textContent = isFiltered ? '🔍' : '🐔';
+        emptyPanel.appendChild(icon);
+
+        const title = document.createElement('h3');
+        title.className = 'state-title';
+        title.textContent = isFiltered
+          ? 'Không tìm thấy quán nào phù hợp bộ lọc'
+          : `Chưa có quán ăn nào tại ${CITY_NAMES[currentCity] || currentCity}`;
+        emptyPanel.appendChild(title);
+
+        const desc = document.createElement('p');
+        desc.className = 'state-desc';
+        desc.textContent = isFiltered
+          ? 'Hãy thử tìm kiếm với từ khóa khác hoặc xóa bớt tiêu chí lọc.'
+          : 'Bấm nút "+ Thêm quán" ở góc trên để bắt đầu thêm quán vào sổ tay ẩm thực của Hưng & Ngân nhé!';
+        emptyPanel.appendChild(desc);
+
+        if (isFiltered) {
+          const resetBtn = document.createElement('button');
+          resetBtn.className = 'btn btn-primary';
+          resetBtn.type = 'button';
+          resetBtn.textContent = 'Xóa bộ lọc';
+          resetBtn.addEventListener('click', resetAllFilters);
+          emptyPanel.appendChild(resetBtn);
+        }
+
+        container.appendChild(emptyPanel);
+        return;
+      }
+
+      await renderRestaurants(filtered);
+    }
+
+    function resetAllFilters() {
+      const searchInput = document.getElementById('searchInput');
+      if (searchInput) searchInput.value = '';
+      currentFilterSearch = '';
+      const clearBtn = document.getElementById('searchClearBtn');
+      if (clearBtn) clearBtn.classList.remove('visible');
+
+      currentFilterCategory = 'all';
+      document.querySelectorAll('.cat-filter-chip').forEach(c => {
+        c.classList.toggle('active', c.dataset.category === 'all');
+      });
+
+      currentFilterStatus = 'all';
+      document.querySelectorAll('.status-filter-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.status === 'all');
+      });
+
+      filterFourStarsOnly = false;
+      const fourStarsSwitch = document.getElementById('fourStarsToggle');
+      if (fourStarsSwitch) fourStarsSwitch.checked = false;
+
+      if (priceSliderMax !== null) {
+        currentFilterPrice = priceSliderMax;
+        const slider = document.getElementById('priceSlider');
+        if (slider) slider.value = priceSliderMax;
+        const valLabel = document.getElementById('priceSliderValue');
+        if (valLabel) valLabel.textContent = priceSliderMax.toLocaleString('vi-VN') + ' đ';
+      }
+
+      // Reset danh sách loại tạm của vòng quay khi đổi bộ lọc
+      tempExcludedIds.clear();
+
+      applyFiltersAndRender();
+    }
+
+    /* ==========================================================================
+       PHASE 4: VÒNG QUAY MAY MẮN (HTML5 CANVAS, CRYPTO RANDOM, PHÁO HOA)
+       ========================================================================== */
+    function pickRandomItems(array, count) {
+      const copy = [...array];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy.slice(0, count);
+    }
+
+    function scheduleWheelUpdate() {
+      if (isSpinning) return;
+      if (wheelDebounceTimer) clearTimeout(wheelDebounceTimer);
+      wheelDebounceTimer = setTimeout(() => {
+        updateWheelDataAndDraw(true);
+      }, 300);
+    }
+
+    function updateWheelDataAndDraw(shouldReshuffle = true) {
+      const eligible = (window.currentDisplayedRestaurants || []).filter(r => !tempExcludedIds.has(r.id));
+      const totalEligible = eligible.length;
+
+      const spinBtn = document.getElementById('spinWheelBtn');
+      const hintEl = document.getElementById('wheelStatusHint');
+      const shuffleBtn = document.getElementById('shuffleWheelBtn');
+      const banner = document.getElementById('tempExcludedBanner');
+      const bannerCount = document.getElementById('tempExcludedCount');
+
+      // Banner quán loại tạm
+      if (tempExcludedIds.size > 0) {
+        banner.style.display = 'flex';
+        bannerCount.textContent = tempExcludedIds.size.toString();
+      } else {
+        banner.style.display = 'none';
+      }
+
+      if (totalEligible === 0) {
+        currentWheelItems = [];
+        spinBtn.disabled = true;
+        shuffleBtn.disabled = true;
+        hintEl.textContent = '0 quán — Hãy thêm quán hoặc nới bộ lọc!';
+        drawWheel([]);
+        return;
+      }
+
+      spinBtn.disabled = false;
+      shuffleBtn.disabled = false;
+
+      if (totalEligible <= 16) {
+        currentWheelItems = [...eligible];
+        hintEl.textContent = `${totalEligible} quán trên vòng quay`;
+      } else {
+        if (shouldReshuffle || currentWheelItems.length === 0) {
+          currentWheelItems = pickRandomItems(eligible, 16);
+        } else {
+          // Bốc bù nếu danh sách hiện tại chứa quán bị loại tạm
+          currentWheelItems = currentWheelItems.filter(r => !tempExcludedIds.has(r.id));
+          const needed = 16 - currentWheelItems.length;
+          if (needed > 0) {
+            const currentIds = new Set(currentWheelItems.map(r => r.id));
+            const availableRemaining = eligible.filter(r => !currentIds.has(r.id));
+            const replacements = pickRandomItems(availableRemaining, needed);
+            currentWheelItems = [...currentWheelItems, ...replacements];
+          }
+        }
+        hintEl.textContent = `16 / ${totalEligible} quán (Bấm 🎲 để xáo)`;
+      }
+
+      drawWheel(currentWheelItems);
+    }
+
+    function drawWheel(items) {
+      const canvas = document.getElementById('wheelCanvas');
+      if (!canvas) return;
+
+      const dpr = window.devicePixelRatio || 1;
+      const size = 300;
+      canvas.width = size * dpr;
+      canvas.height = size * dpr;
+
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+
+      const centerX = size / 2;
+      const centerY = size / 2;
+      const radius = size / 2 - 4;
+
+      ctx.clearRect(0, 0, size, size);
+
+      if (!items || items.length === 0) {
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+        ctx.fillStyle = document.documentElement.getAttribute('data-theme') === 'dark' ? '#2a2320' : '#f5ede3';
+        ctx.fill();
+        ctx.strokeStyle = document.documentElement.getAttribute('data-theme') === 'dark' ? '#443833' : '#e0d5c7';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        ctx.fillStyle = 'var(--text-muted)';
+        ctx.font = 'bold 14px system-ui';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('Chưa có quán để quay 🐔', centerX, centerY);
+        return;
+      }
+
+      const n = items.length;
+      const sliceAngle = (Math.PI * 2) / n;
+
+      for (let i = 0; i < n; i++) {
+        // Vẽ từng ô xuất phát từ đỉnh trên cùng (-90 độ)
+        const startAngle = -Math.PI / 2 + i * sliceAngle;
+        const endAngle = -Math.PI / 2 + (i + 1) * sliceAngle;
+
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+        ctx.closePath();
+        ctx.fillStyle = WHEEL_COLORS[i % WHEEL_COLORS.length];
+        ctx.fill();
+
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Tên quán chạy dọc bán kính từ tâm ra mép
+        ctx.save();
+        ctx.translate(centerX, centerY);
+        const midAngle = startAngle + sliceAngle / 2;
+        ctx.rotate(midAngle);
+
+        ctx.fillStyle = '#ffffff';
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'middle';
+
+        let name = items[i].name || 'Quán';
+        if (n > 10 && name.length > 12) {
+          name = name.slice(0, 11) + '…';
+        } else if (name.length > 16) {
+          name = name.slice(0, 15) + '…';
+        }
+
+        ctx.font = n > 12 ? 'bold 11px system-ui' : 'bold 12px system-ui';
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.4)';
+        ctx.shadowBlur = 3;
+        ctx.fillText(name, radius - 16, 0);
+
+        ctx.restore();
+      }
+
+      // Viền ngoài bánh xe
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      // Tâm vòng quay trang trí (hub) với logo gà 🐔
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, 22, 0, Math.PI * 2);
+      ctx.fillStyle = '#ffffff';
+      ctx.fill();
+      ctx.strokeStyle = 'var(--primary)';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      ctx.font = '16px system-ui';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('🐔', centerX, centerY);
+    }
+
+    function pickWinningIndex(itemCount) {
+      const arr = new Uint32Array(1);
+      crypto.getRandomValues(arr);
+      return arr[0] % itemCount;
+    }
+
+    function spinWheel() {
+      if (isSpinning || currentWheelItems.length === 0) return;
+
+      isSpinning = true;
+      const spinBtn = document.getElementById('spinWheelBtn');
+      const shuffleBtn = document.getElementById('shuffleWheelBtn');
+      spinBtn.disabled = true;
+      shuffleBtn.disabled = true;
+
+      // 1. Chọn TRƯỚC ô trúng thưởng bằng crypto.getRandomValues
+      const winningIndex = pickWinningIndex(currentWheelItems.length);
+      currentWinningRestaurant = currentWheelItems[winningIndex];
+
+      // 2. Tính góc quay chính xác để kim cố định ở đỉnh (12 o'clock) dừng CHÍNH XÁC giữa ô trúng thưởng
+      const n = currentWheelItems.length;
+      const sliceDeg = 360 / n;
+      const targetAngleMod = (360 - (winningIndex + 0.5) * sliceDeg) % 360;
+
+      const currentMod = currentWheelRotation % 360;
+      let delta = (targetAngleMod - currentMod + 360) % 360;
+      if (delta === 0) delta = 360;
+
+      // Quay từ 5 đến 8 vòng đầy đủ
+      const fullTurns = (5 + Math.floor(Math.random() * 4)) * 360;
+      currentWheelRotation = currentWheelRotation + fullTurns + delta;
+
+      const canvas = document.getElementById('wheelCanvas');
+      canvas.style.transition = 'transform 4.5s cubic-bezier(0.15, 0.9, 0.2, 1)';
+      canvas.style.transform = `rotate(${currentWheelRotation}deg)`;
+
+      let finished = false;
+      let fallbackTimer = null;
+
+      const onSpinEnd = () => {
+        if (finished) return;
+        finished = true;
+        if (fallbackTimer) clearTimeout(fallbackTimer);
+        canvas.removeEventListener('transitionend', onSpinEnd);
+
+        isSpinning = false;
+        spinBtn.disabled = false;
+        shuffleBtn.disabled = false;
+
+        // 3. Bắn pháo hoa Canvas tự viết (~40 dòng JS thuần)
+        triggerFireworks(2200);
+
+        // 4. Hiện popup kết quả
+        setTimeout(() => {
+          showWheelResultModal(currentWinningRestaurant);
+        }, 350);
+      };
+
+      canvas.addEventListener('transitionend', onSpinEnd, { once: true });
+      // Timeout dự phòng nếu tab bị ẩn hoặc transitionend không chạy
+      fallbackTimer = setTimeout(onSpinEnd, 5000);
+    }
+
+    /* Pháo hoa Canvas tự viết (~40 dòng JS thuần, không thư viện ngoài) */
+    function triggerFireworks(durationMs = 2200) {
+      const canvas = document.getElementById('fireworksCanvas');
+      if (!canvas) return;
+
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      canvas.style.display = 'block';
+      const ctx = canvas.getContext('2d');
+
+      const particles = [];
+      const colors = ['#f94144', '#f3722c', '#f8961e', '#f9c74f', '#90be6d', '#43aa8b', '#577590', '#ffffff'];
+
+      function createBurst(x, y) {
+        for (let i = 0; i < 45; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const speed = Math.random() * 6 + 2;
+          particles.push({
+            x, y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            alpha: 1,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            size: Math.random() * 3 + 2
+          });
+        }
+      }
+
+      createBurst(canvas.width * 0.5, canvas.height * 0.4);
+      setTimeout(() => createBurst(canvas.width * 0.35, canvas.height * 0.3), 250);
+      setTimeout(() => createBurst(canvas.width * 0.65, canvas.height * 0.35), 500);
+
+      const startTime = performance.now();
+      let animId;
+
+      function render(now) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = particles.length - 1; i >= 0; i--) {
+          const p = particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.08;
+          p.alpha -= 0.016;
+          if (p.alpha <= 0) {
+            particles.splice(i, 1);
+            continue;
+          }
+          ctx.globalAlpha = p.alpha;
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+
+        if (now - startTime < durationMs || particles.length > 0) {
+          animId = requestAnimationFrame(render);
+        } else {
+          cancelAnimationFrame(animId);
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          canvas.style.display = 'none';
+        }
+      }
+      animId = requestAnimationFrame(render);
+    }
+
+    function showWheelResultModal(restaurant) {
+      if (!restaurant) return;
+      document.getElementById('resultRestaurantName').textContent = restaurant.name || 'Không tên';
+
+      const catBadge = document.getElementById('resultCategoryBadge');
+      catBadge.className = `card-category-badge ${getCategoryClass(restaurant.category)}`;
+      catBadge.textContent = restaurant.category || 'Khác';
+
+      const priceEl = document.getElementById('resultPrice');
+      priceEl.textContent = (typeof restaurant.price === 'number')
+        ? restaurant.price.toLocaleString('vi-VN') + ' đ'
+        : 'Chưa rõ giá';
+
+      const addrEl = document.getElementById('resultAddress');
+      addrEl.textContent = restaurant.address ? `📍 ${restaurant.address}` : '📍 Chưa có địa chỉ';
+
+      document.getElementById('wheelResultModal').classList.add('active');
+    }
+
+    function closeWheelResultModal() {
+      const modal = document.getElementById('wheelResultModal');
+      if (modal) modal.classList.remove('active');
+    }
+
+    function handleSpinAnother() {
+      closeWheelResultModal();
+      if (!currentWinningRestaurant) return;
+
+      // Loại quán vừa trúng khỏi TOÀN BỘ nguồn vòng quay
+      tempExcludedIds.add(currentWinningRestaurant.id);
+      showToast(`Đã loại tạm "${currentWinningRestaurant.name}" khỏi vòng quay`, 'info');
+
+      // Bốc bù quán khác và vẽ lại vòng quay
+      updateWheelDataAndDraw(false);
+    }
+
+    function restoreExcludedRestaurants() {
+      tempExcludedIds.clear();
+      showToast('Đã khôi phục các quán bị loại tạm vào vòng quay 🐔', 'success');
+      updateWheelDataAndDraw(true);
+    }
+
+    /* ==========================================================================
+       VẼ THẺ QUÁN TRÊN DANH SÁCH (CHỐNG XSS 100%)
+       ========================================================================== */
+    async function renderRestaurants(restaurants) {
+      const container = document.getElementById('restaurantsContainer');
+
+      if (activeCardUrls.length > 0) {
+        activeCardUrls.forEach(url => URL.revokeObjectURL(url));
+        activeCardUrls = [];
+      }
+
+      while (container.firstChild) {
+        container.removeChild(container.firstChild);
+      }
+
+      for (const r of restaurants) {
+        const card = document.createElement('article');
+        card.className = 'restaurant-card';
+        card.setAttribute('data-id', r.id);
+
+        const { coverBlob, imageCount } = await getCardCoverMeta(r.id);
+
+        // 1. Cover Wrap
+        const coverWrap = document.createElement('div');
+        coverWrap.className = 'card-cover-wrap';
+        coverWrap.title = imageCount > 0 ? 'Bấm để phóng to xem ảnh' : 'Chưa có ảnh';
+
+        if (coverBlob) {
+          const coverUrl = URL.createObjectURL(coverBlob);
+          activeCardUrls.push(coverUrl);
+
+          const img = document.createElement('img');
+          img.className = 'card-cover-img';
+          img.src = coverUrl;
+          img.alt = r.name || 'Ảnh quán';
+          img.loading = 'lazy';
+          coverWrap.appendChild(img);
+        } else {
+          const fallback = document.createElement('div');
+          fallback.className = 'card-cover-fallback';
+          fallback.textContent = '🐔';
+          coverWrap.appendChild(fallback);
+        }
+
+        if (imageCount > 0) {
+          const countBadge = document.createElement('span');
+          countBadge.className = 'card-photo-count';
+          countBadge.textContent = `📷 ${imageCount}`;
+          coverWrap.appendChild(countBadge);
+
+          coverWrap.addEventListener('click', () => openLightbox(r.id, r.name));
+        }
+
+        const statusBadge = document.createElement('span');
+        statusBadge.className = `card-status-badge ${r.status === 'eaten' ? 'status-eaten' : 'status-wishlist'}`;
+        statusBadge.textContent = r.status === 'eaten' ? 'Đã ăn 😋' : 'Muốn thử ✨';
+        coverWrap.appendChild(statusBadge);
+
+        card.appendChild(coverWrap);
+
+        // 2. Card Body
+        const cardBody = document.createElement('div');
+        cardBody.className = 'card-body';
+
+        const topRow = document.createElement('div');
+        topRow.className = 'card-top-row';
+
+        const nameEl = document.createElement('h3');
+        nameEl.className = 'card-title';
+        nameEl.textContent = r.name || 'Chưa đặt tên';
+        topRow.appendChild(nameEl);
+
+        const catBadge = document.createElement('span');
+        catBadge.className = `card-category-badge ${getCategoryClass(r.category)}`;
+        catBadge.textContent = r.category || 'Khác';
+        topRow.appendChild(catBadge);
+
+        cardBody.appendChild(topRow);
+
+        // Ratings Row
+        const ratingsRow = document.createElement('div');
+        ratingsRow.className = 'card-ratings-row';
+
+        const hungItem = document.createElement('div');
+        hungItem.className = 'card-rating-item';
+        const hungLabel = document.createElement('span');
+        hungLabel.className = 'rating-name';
+        hungLabel.textContent = 'Hưng:';
+        hungItem.appendChild(hungLabel);
+
+        const hungVal = document.createElement('span');
+        if (typeof r.ratingHung === 'number') {
+          hungVal.className = 'rating-stars';
+          hungVal.textContent = '★'.repeat(r.ratingHung) + ` (${r.ratingHung}/5)`;
+        } else {
+          hungVal.className = 'rating-empty';
+          hungVal.textContent = 'Chưa chấm';
+        }
+        hungItem.appendChild(hungVal);
+        ratingsRow.appendChild(hungItem);
+
+        const nganItem = document.createElement('div');
+        nganItem.className = 'card-rating-item';
+        const nganLabel = document.createElement('span');
+        nganLabel.className = 'rating-name';
+        nganLabel.textContent = 'Ngân:';
+        nganItem.appendChild(nganLabel);
+
+        const nganVal = document.createElement('span');
+        if (typeof r.ratingNgan === 'number') {
+          nganVal.className = 'rating-stars';
+          nganVal.textContent = '★'.repeat(r.ratingNgan) + ` (${r.ratingNgan}/5)`;
+        } else {
+          nganVal.className = 'rating-empty';
+          nganVal.textContent = 'Chưa chấm';
+        }
+        nganItem.appendChild(nganVal);
+        ratingsRow.appendChild(nganItem);
+
+        cardBody.appendChild(ratingsRow);
+
+        // Info Row: Giá & Địa chỉ
+        const infoRow = document.createElement('div');
+        infoRow.className = 'card-info-row';
+
+        const priceItem = document.createElement('div');
+        priceItem.className = 'card-info-item';
+        const priceIcon = document.createElement('span');
+        priceIcon.textContent = '🏷️';
+        priceItem.appendChild(priceIcon);
+
+        const priceText = document.createElement('span');
+        if (typeof r.price === 'number') {
+          priceText.className = 'card-price';
+          priceText.textContent = r.price.toLocaleString('vi-VN') + ' đ';
+        } else {
+          priceText.textContent = 'Chưa rõ giá';
+          priceText.style.color = 'var(--text-faint)';
+        }
+        priceItem.appendChild(priceText);
+        infoRow.appendChild(priceItem);
+
+        if (r.address && r.address.trim()) {
+          const addrItem = document.createElement('div');
+          addrItem.className = 'card-info-item';
+          addrItem.title = r.address;
+
+          const addrIcon = document.createElement('span');
+          addrIcon.textContent = '📍';
+          addrItem.appendChild(addrIcon);
+
+          const addrText = document.createElement('span');
+          addrText.textContent = r.address;
+          addrItem.appendChild(addrText);
+
+          infoRow.appendChild(addrItem);
+        }
+
+        cardBody.appendChild(infoRow);
+
+        if (r.review && r.review.trim()) {
+          const reviewEl = document.createElement('div');
+          reviewEl.className = 'card-review';
+          reviewEl.textContent = `“${r.review}”`;
+          cardBody.appendChild(reviewEl);
+        }
+
+        // Card Footer Actions
+        const footerActions = document.createElement('div');
+        footerActions.className = 'card-footer-actions';
+
+        if (imageCount > 0) {
+          const viewPhotosBtn = document.createElement('button');
+          viewPhotosBtn.className = 'btn btn-secondary btn-sm';
+          viewPhotosBtn.type = 'button';
+          viewPhotosBtn.textContent = 'Xem ảnh';
+          viewPhotosBtn.addEventListener('click', () => openLightbox(r.id, r.name));
+          footerActions.appendChild(viewPhotosBtn);
+        }
+
+        const editBtn = document.createElement('button');
+        editBtn.className = 'btn btn-secondary btn-sm';
+        editBtn.type = 'button';
+        editBtn.textContent = 'Sửa';
+        editBtn.addEventListener('click', () => openEditRestaurantModal(r.id));
+        footerActions.appendChild(editBtn);
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'btn btn-danger btn-sm';
+        deleteBtn.type = 'button';
+        deleteBtn.textContent = 'Xóa';
+        deleteBtn.addEventListener('click', () => initiateDeleteRestaurant(r));
+        footerActions.appendChild(deleteBtn);
+
+        cardBody.appendChild(footerActions);
+        card.appendChild(cardBody);
+        container.appendChild(card);
+      }
+    }
+
+    function renderLoadingState() {
+      const container = document.getElementById('restaurantsContainer');
+      while (container.firstChild) {
+        container.removeChild(container.firstChild);
+      }
+
+      const panel = document.createElement('div');
+      panel.className = 'state-panel';
+      panel.style.gridColumn = '1 / -1';
+
+      const spinner = document.createElement('div');
+      spinner.className = 'spinner';
+      panel.appendChild(spinner);
+
+      const title = document.createElement('h3');
+      title.className = 'state-title';
+      title.textContent = 'Đang tải dữ liệu quán ăn... 🐔';
+      panel.appendChild(title);
+
+      container.appendChild(panel);
+    }
+
+    function renderErrorState(err) {
+      const container = document.getElementById('restaurantsContainer');
+      while (container.firstChild) {
+        container.removeChild(container.firstChild);
+      }
+
+      const panel = document.createElement('div');
+      panel.className = 'state-panel';
+      panel.style.gridColumn = '1 / -1';
+
+      const icon = document.createElement('div');
+      icon.className = 'state-icon';
+      icon.textContent = '🐔💦';
+      panel.appendChild(icon);
+
+      const title = document.createElement('h3');
+      title.className = 'state-title';
+      title.textContent = 'Không thể tải danh sách quán ăn';
+      panel.appendChild(title);
+
+      const desc = document.createElement('p');
+      desc.className = 'state-desc';
+      desc.textContent = err && err.message ? err.message : 'Đã có lỗi xảy ra khi truy xuất cơ sở dữ liệu IndexedDB.';
+      panel.appendChild(desc);
+
+      const retryBtn = document.createElement('button');
+      retryBtn.className = 'btn btn-secondary';
+      retryBtn.textContent = 'Thử tải lại';
+      retryBtn.addEventListener('click', () => loadCityData(currentCity));
+      panel.appendChild(retryBtn);
+
+      container.appendChild(panel);
+    }
+
+    async function loadCityData(city) {
+      renderLoadingState();
+      try {
+        allCityRestaurants = await getRestaurantsByCity(city);
+        updateStats(allCityRestaurants);
+        initPriceSliderFromData(allCityRestaurants);
+        applyFiltersAndRender();
+      } catch (err) {
+        renderErrorState(err);
+      }
+    }
+
+    /* ==========================================================================
+       XỬ LÝ ẢNH BẰNG CANVAS & QUẢN LÝ ẢNH TRONG FORM
+       ========================================================================== */
+    function resetFormImages() {
+      formNewImages.forEach(img => URL.revokeObjectURL(img.previewUrl));
+      formExistingImages.forEach(img => URL.revokeObjectURL(img.previewUrl));
+      formNewImages = [];
+      formExistingImages = [];
+      renderImagePreviews();
+    }
+
+    function handleFilesAdded(files) {
+      if (!files || files.length === 0) return;
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (!file.type || !file.type.startsWith('image/')) continue;
+        const previewUrl = URL.createObjectURL(file);
+        formNewImages.push({
+          file: file,
+          type: 'food',
+          previewUrl: previewUrl
+        });
+      }
+      renderImagePreviews();
+    }
+
+    function renderImagePreviews() {
+      const container = document.getElementById('imagePreviewContainer');
+      while (container.firstChild) {
+        container.removeChild(container.firstChild);
+      }
+
+      formExistingImages.forEach((img, idx) => {
+        if (img.isDeleted) return;
+
+        const card = document.createElement('div');
+        card.className = 'image-preview-card';
+
+        const thumb = document.createElement('img');
+        thumb.className = 'image-preview-thumb';
+        thumb.src = img.previewUrl;
+        thumb.alt = 'Ảnh đã lưu';
+        card.appendChild(thumb);
+
+        const delBtn = document.createElement('button');
+        delBtn.className = 'image-delete-btn';
+        delBtn.type = 'button';
+        delBtn.title = 'Xóa ảnh này';
+        delBtn.textContent = '✕';
+        delBtn.addEventListener('click', () => {
+          img.isDeleted = true;
+          renderImagePreviews();
+        });
+        card.appendChild(delBtn);
+
+        const actions = document.createElement('div');
+        actions.className = 'image-preview-actions';
+
+        const toggleBtn = document.createElement('button');
+        toggleBtn.className = `type-toggle-btn ${img.type === 'menu' ? 'is-menu' : ''}`;
+        toggleBtn.type = 'button';
+        toggleBtn.textContent = img.type === 'menu' ? 'Menu' : 'Ảnh Món';
+        toggleBtn.addEventListener('click', () => {
+          img.type = (img.type === 'food') ? 'menu' : 'food';
+          img.isTypeChanged = true;
+          renderImagePreviews();
+        });
+        actions.appendChild(toggleBtn);
+
+        card.appendChild(actions);
+        container.appendChild(card);
+      });
+
+      formNewImages.forEach((img, idx) => {
+        const card = document.createElement('div');
+        card.className = 'image-preview-card';
+
+        const thumb = document.createElement('img');
+        thumb.className = 'image-preview-thumb';
+        thumb.src = img.previewUrl;
+        thumb.alt = 'Ảnh mới';
+        card.appendChild(thumb);
+
+        const delBtn = document.createElement('button');
+        delBtn.className = 'image-delete-btn';
+        delBtn.type = 'button';
+        delBtn.title = 'Xóa ảnh này';
+        delBtn.textContent = '✕';
+        delBtn.addEventListener('click', () => {
+          URL.revokeObjectURL(img.previewUrl);
+          formNewImages.splice(idx, 1);
+          renderImagePreviews();
+        });
+        card.appendChild(delBtn);
+
+        const actions = document.createElement('div');
+        actions.className = 'image-preview-actions';
+
+        const toggleBtn = document.createElement('button');
+        toggleBtn.className = `type-toggle-btn ${img.type === 'menu' ? 'is-menu' : ''}`;
+        toggleBtn.type = 'button';
+        toggleBtn.textContent = img.type === 'menu' ? 'Menu' : 'Ảnh Món';
+        toggleBtn.addEventListener('click', () => {
+          img.type = (img.type === 'food') ? 'menu' : 'food';
+          renderImagePreviews();
+        });
+        actions.appendChild(toggleBtn);
+
+        card.appendChild(actions);
+        container.appendChild(card);
+      });
+    }
+
+    async function processImageFile(file, type) {
+      let bitmap = null;
+      try {
+        bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' });
+      } catch (err) {
+        showToast(`Không thể đọc ảnh "${file.name}" (có thể do định dạng không hỗ trợ). Đã bỏ qua ảnh này!`, 'error');
+        return null;
+      }
+
+      try {
+        let w = bitmap.width;
+        let h = bitmap.height;
+        const maxW = (type === 'menu') ? 1600 : 800;
+
+        if (w > maxW) {
+          h = Math.round(h * (maxW / w));
+          w = maxW;
+        }
+
+        const mainCanvas = document.createElement('canvas');
+        mainCanvas.width = w;
+        mainCanvas.height = h;
+        const mCtx = mainCanvas.getContext('2d');
+        mCtx.fillStyle = '#FFFFFF';
+        mCtx.fillRect(0, 0, w, h);
+        mCtx.drawImage(bitmap, 0, 0, w, h);
+
+        const mainBlob = await new Promise(resolve => mainCanvas.toBlob(resolve, 'image/jpeg', 0.8));
+
+        let tw = bitmap.width;
+        let th = bitmap.height;
+        const maxThumbW = 300;
+
+        if (tw > maxThumbW) {
+          th = Math.round(th * (maxThumbW / tw));
+          tw = maxThumbW;
+        }
+
+        const thumbCanvas = document.createElement('canvas');
+        thumbCanvas.width = tw;
+        thumbCanvas.height = th;
+        const tCtx = thumbCanvas.getContext('2d');
+        tCtx.fillStyle = '#FFFFFF';
+        tCtx.fillRect(0, 0, tw, th);
+        tCtx.drawImage(bitmap, 0, 0, tw, th);
+
+        const thumbBlob = await new Promise(resolve => thumbCanvas.toBlob(resolve, 'image/jpeg', 0.8));
+
+        if (bitmap.close) bitmap.close();
+
+        return {
+          blob: mainBlob,
+          thumb: thumbBlob
+        };
+      } catch (canvasErr) {
+        if (bitmap && bitmap.close) bitmap.close();
+        showToast(`Lỗi xử lý ảnh "${file.name}": ` + (canvasErr.message || ''), 'error');
+        return null;
+      }
+    }
+
+    /* ==========================================================================
+       PHASE 3: CẢNH BÁO TRÙNG LẶP & LƯU QUÁN ĂN
+       ========================================================================== */
+    function checkDuplicateRestaurant(nameVal, addressVal, currentId) {
+      const normName = normalize(nameVal);
+      const normAddr = addressVal ? normalize(addressVal) : '';
+      const duplicates = [];
+
+      for (const r of allCityRestaurants) {
+        if (currentId && r.id === currentId) continue;
+
+        const isSameName = (normalize(r.name) === normName);
+        const isSameAddress = (normAddr !== '' && r.address && normalize(r.address) === normAddr);
+
+        if (isSameName || isSameAddress) {
+          duplicates.push({
+            restaurant: r,
+            isSameName,
+            isSameAddress
+          });
+        }
+      }
+
+      return duplicates;
+    }
+
+    function showDuplicateWarning(duplicates, proceedCallback) {
+      const modal = document.getElementById('duplicateWarningModal');
+      const body = document.getElementById('dupModalBody');
+      while (body.firstChild) {
+        body.removeChild(body.firstChild);
+      }
+
+      const desc = document.createElement('div');
+      desc.textContent = `Phát hiện ${duplicates.length} quán có thông tin tương tự trong cùng khu vực ${CITY_NAMES[currentCity]}:`;
+      body.appendChild(desc);
+
+      const list = document.createElement('ul');
+      list.style.paddingLeft = '18px';
+      list.style.marginTop = '4px';
+
+      duplicates.forEach(d => {
+        const item = document.createElement('li');
+        const r = d.restaurant;
+        let reasons = [];
+        if (d.isSameName) reasons.push('trùng tên');
+        if (d.isSameAddress) reasons.push('trùng địa chỉ');
+
+        item.textContent = `"${r.name}" (${r.address || 'chưa rõ địa chỉ'}) — [${reasons.join(', ')}]`;
+        list.appendChild(item);
+      });
+
+      body.appendChild(list);
+      modal.classList.add('active');
+
+      const proceedBtn = document.getElementById('dupProceedBtn');
+      const backBtn = document.getElementById('dupBackBtn');
+      const closeBtn = document.getElementById('closeDupModalBtn');
+
+      const cleanup = () => {
+        modal.classList.remove('active');
+        proceedBtn.onclick = null;
+        backBtn.onclick = null;
+        closeBtn.onclick = null;
+      };
+
+      proceedBtn.onclick = () => {
+        cleanup();
+        proceedCallback();
+      };
+
+      backBtn.onclick = () => {
+        cleanup();
+      };
+
+      closeBtn.onclick = () => {
+        cleanup();
+      };
+    }
+
+    function openAddRestaurantModal() {
+      editingRestaurantId = null;
+      document.getElementById('restaurantModalTitle').textContent = 'Thêm quán mới';
+      document.getElementById('restaurantForm').reset();
+      document.getElementById('formCategory').value = 'Bún/Phở';
+      document.getElementById('formStatus').value = 'eaten';
+      document.getElementById('formRatingHung').value = '';
+      document.getElementById('formRatingNgan').value = '';
+
+      resetFormImages();
+      document.getElementById('restaurantModal').classList.add('active');
+    }
+
+    async function openEditRestaurantModal(id) {
+      if (!dbInstance) return;
+      try {
+        const tx = dbInstance.transaction(['restaurants'], 'readonly');
+        const store = tx.objectStore('restaurants');
+        const req = store.get(id);
+
+        req.onsuccess = async () => {
+          const r = req.result;
+          if (!r) {
+            showToast('Không tìm thấy quán ăn', 'error');
+            return;
+          }
+
+          editingRestaurantId = r.id;
+          document.getElementById('restaurantModalTitle').textContent = 'Sửa thông tin quán';
+
+          document.getElementById('formName').value = r.name || '';
+          document.getElementById('formCategory').value = r.category || 'Khác';
+          document.getElementById('formPrice').value = (typeof r.price === 'number') ? r.price : '';
+          document.getElementById('formAddress').value = r.address || '';
+          document.getElementById('formStatus').value = r.status || 'eaten';
+          document.getElementById('formRatingHung').value = (r.ratingHung != null) ? r.ratingHung.toString() : '';
+          document.getElementById('formRatingNgan').value = (r.ratingNgan != null) ? r.ratingNgan.toString() : '';
+          document.getElementById('formReview').value = r.review || '';
+
+          resetFormImages();
+
+          const existing = await getImagesByRestaurantId(r.id);
+          formExistingImages = existing.map(img => ({
+            ...img,
+            previewUrl: URL.createObjectURL(img.thumb || img.blob),
+            isDeleted: false,
+            isTypeChanged: false
+          }));
+
+          renderImagePreviews();
+          document.getElementById('restaurantModal').classList.add('active');
+        };
+
+        req.onerror = () => {
+          showToast('Lỗi khi nạp dữ liệu quán ăn', 'error');
+        };
+      } catch (err) {
+        showToast('Lỗi: ' + (err.message || ''), 'error');
+      }
+    }
+
+    function closeRestaurantModal() {
+      resetFormImages();
+      document.getElementById('restaurantModal').classList.remove('active');
+      editingRestaurantId = null;
+    }
+
+    async function handleSaveRestaurant(e) {
+      e.preventDefault();
+
+      const nameVal = document.getElementById('formName').value.trim();
+      if (!nameVal) {
+        showToast('Vui lòng nhập tên quán ăn!', 'error');
+        document.getElementById('formName').focus();
+        return;
+      }
+
+      const addressVal = document.getElementById('formAddress').value.trim();
+
+      const duplicates = checkDuplicateRestaurant(nameVal, addressVal, editingRestaurantId);
+
+      if (duplicates.length > 0) {
+        showDuplicateWarning(duplicates, () => {
+          executeCommitSaveRestaurant();
+        });
+      } else {
+        await executeCommitSaveRestaurant();
+      }
+    }
+
+    async function executeCommitSaveRestaurant() {
+      const nameVal = document.getElementById('formName').value.trim();
+      const categoryVal = document.getElementById('formCategory').value;
+      const priceRaw = document.getElementById('formPrice').value.trim();
+      const priceVal = (priceRaw !== '' && !isNaN(Number(priceRaw))) ? Number(priceRaw) : null;
+      const addressVal = document.getElementById('formAddress').value.trim();
+      const statusVal = document.getElementById('formStatus').value;
+
+      const rHungRaw = document.getElementById('formRatingHung').value;
+      const ratingHungVal = rHungRaw !== '' ? parseInt(rHungRaw, 10) : null;
+
+      const rNganRaw = document.getElementById('formRatingNgan').value;
+      const ratingNganVal = rNganRaw !== '' ? parseInt(rNganRaw, 10) : null;
+
+      const reviewVal = document.getElementById('formReview').value.trim();
+
+      const saveBtn = document.getElementById('saveRestaurantBtn');
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'Đang lưu...';
+
+      try {
+        const processedNewImages = [];
+        for (const item of formNewImages) {
+          const res = await processImageFile(item.file, item.type);
+          if (res) {
+            processedNewImages.push({
+              imageId: crypto.randomUUID(),
+              type: item.type,
+              blob: res.blob,
+              thumb: res.thumb,
+              createdAt: new Date().toISOString()
+            });
+          }
+        }
+
+        const nowIso = new Date().toISOString();
+        let restaurantObj = null;
+
+        if (editingRestaurantId) {
+          const oldRecord = await new Promise((res, rej) => {
+            const getTx = dbInstance.transaction(['restaurants'], 'readonly');
+            const getReq = getTx.objectStore('restaurants').get(editingRestaurantId);
+            getReq.onsuccess = () => res(getReq.result);
+            getReq.onerror = () => rej(getReq.error);
+          });
+
+          restaurantObj = {
+            ...oldRecord,
+            name: nameVal,
+            category: categoryVal,
+            price: priceVal,
+            address: addressVal,
+            status: statusVal,
+            ratingHung: ratingHungVal,
+            ratingNgan: ratingNganVal,
+            review: reviewVal,
+            updatedAt: nowIso
+          };
+        } else {
+          restaurantObj = {
+            id: crypto.randomUUID(),
+            city: currentCity,
+            name: nameVal,
+            category: categoryVal,
+            price: priceVal,
+            address: addressVal,
+            status: statusVal,
+            ratingHung: ratingHungVal,
+            ratingNgan: ratingNganVal,
+            review: reviewVal,
+            createdAt: nowIso,
+            updatedAt: nowIso
+          };
+        }
+
+        await new Promise((resolve, reject) => {
+          const tx = dbInstance.transaction(['restaurants', 'images'], 'readwrite');
+          const rStore = tx.objectStore('restaurants');
+          const iStore = tx.objectStore('images');
+
+          rStore.put(restaurantObj);
+
+          for (const newImg of processedNewImages) {
+            newImg.restaurantId = restaurantObj.id;
+            iStore.put(newImg);
+          }
+
+          if (editingRestaurantId) {
+            for (const oldImg of formExistingImages) {
+              if (oldImg.isDeleted) {
+                iStore.delete(oldImg.imageId);
+              } else if (oldImg.isTypeChanged) {
+                iStore.put({
+                  imageId: oldImg.imageId,
+                  restaurantId: oldImg.restaurantId,
+                  type: oldImg.type,
+                  blob: oldImg.blob,
+                  thumb: oldImg.thumb,
+                  createdAt: oldImg.createdAt
+                });
+              }
+            }
+          }
+
+          tx.oncomplete = () => resolve();
+          tx.onerror = (event) => reject(event.target.error || new Error('Giao dịch lưu dữ liệu thất bại'));
+          tx.onabort = (event) => reject(event.target.error || new Error('Giao dịch bị hủy'));
+        });
+
+        showToast(editingRestaurantId ? 'Đã cập nhật quán ăn 🐔' : 'Đã thêm quán mới 🐔', 'success');
+        closeRestaurantModal();
+        await loadCityData(currentCity);
+      } catch (err) {
+        showToast('Lỗi khi lưu quán ăn (ví dụ hết dung lượng): ' + (err.message || ''), 'error');
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'Lưu quán';
+      }
+    }
+
+    /* ==========================================================================
+       LIGHTBOX XEM ẢNH TOÀN MÀN HÌNH
+       ========================================================================== */
+    async function openLightbox(restaurantId, restaurantName) {
+      const images = await getImagesByRestaurantId(restaurantId);
+      if (!images || images.length === 0) {
+        showToast('Quán này chưa có ảnh nào', 'info');
+        return;
+      }
+
+      closeLightbox();
+
+      lightboxImages = images.map(img => {
+        const url = URL.createObjectURL(img.blob);
+        lightboxActiveUrls.push(url);
+        return {
+          imageId: img.imageId,
+          type: img.type,
+          url: url
+        };
+      });
+
+      lightboxCurrentIndex = 0;
+      document.getElementById('lightboxRestaurantName').textContent = restaurantName || 'Chi tiết ảnh';
+      updateLightboxDisplay();
+
+      document.getElementById('lightboxModal').classList.add('active');
+    }
+
+    function updateLightboxDisplay() {
+      if (lightboxImages.length === 0) return;
+      const current = lightboxImages[lightboxCurrentIndex];
+      const imgEl = document.getElementById('lightboxMainImg');
+      imgEl.src = current.url;
+
+      const badge = document.getElementById('lightboxTypeBadge');
+      badge.textContent = current.type === 'menu' ? 'Menu' : 'Ảnh Món';
+      badge.style.backgroundColor = current.type === 'menu' ? 'var(--primary)' : 'var(--accent)';
+
+      document.getElementById('lightboxCounter').textContent = `${lightboxCurrentIndex + 1} / ${lightboxImages.length}`;
+
+      const prevBtn = document.getElementById('lightboxPrevBtn');
+      const nextBtn = document.getElementById('lightboxNextBtn');
+      if (lightboxImages.length <= 1) {
+        prevBtn.style.display = 'none';
+        nextBtn.style.display = 'none';
+      } else {
+        prevBtn.style.display = 'flex';
+        nextBtn.style.display = 'flex';
+      }
+    }
+
+    function lightboxPrev() {
+      if (lightboxImages.length <= 1) return;
+      lightboxCurrentIndex = (lightboxCurrentIndex - 1 + lightboxImages.length) % lightboxImages.length;
+      updateLightboxDisplay();
+    }
+
+    function lightboxNext() {
+      if (lightboxImages.length <= 1) return;
+      lightboxCurrentIndex = (lightboxCurrentIndex + 1) % lightboxImages.length;
+      updateLightboxDisplay();
+    }
+
+    function closeLightbox() {
+      const modal = document.getElementById('lightboxModal');
+      if (modal) modal.classList.remove('active');
+
+      if (lightboxActiveUrls.length > 0) {
+        lightboxActiveUrls.forEach(url => URL.revokeObjectURL(url));
+        lightboxActiveUrls = [];
+      }
+      lightboxImages = [];
+      lightboxCurrentIndex = 0;
+    }
+
+    /* ==========================================================================
+       XÓA VÀ HOÀN TÁC
+       ========================================================================== */
+    function initiateDeleteRestaurant(restaurant) {
+      const id = restaurant.id;
+      if (pendingDeletions.has(id)) return;
+
+      const cardEl = document.querySelector(`.restaurant-card[data-id="${id}"]`);
+      if (cardEl) {
+        cardEl.style.display = 'none';
+      }
+
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = 'toast toast-error';
+
+      const icon = document.createElement('span');
+      icon.textContent = '🗑️';
+      toast.appendChild(icon);
+
+      const msgSpan = document.createElement('span');
+      msgSpan.textContent = `Đã xóa "${restaurant.name}"`;
+      toast.appendChild(msgSpan);
+
+      const undoBtn = document.createElement('button');
+      undoBtn.className = 'toast-undo-btn';
+      undoBtn.type = 'button';
+      undoBtn.textContent = 'HOÀN TÁC (5s)';
+      toast.appendChild(undoBtn);
+
+      container.appendChild(toast);
+
+      let secondsLeft = 5;
+
+      const countdownInterval = setInterval(() => {
+        secondsLeft--;
+        if (secondsLeft > 0) {
+          undoBtn.textContent = `HOÀN TÁC (${secondsLeft}s)`;
+        } else {
+          clearInterval(countdownInterval);
+        }
+      }, 1000);
+
+      const finalTimeout = setTimeout(async () => {
+        clearInterval(countdownInterval);
+        dismissToast(toast);
+        pendingDeletions.delete(id);
+        await commitDeleteRestaurant(id);
+      }, 5000);
+
+      pendingDeletions.set(id, {
+        restaurant: restaurant,
+        toastEl: toast,
+        countdownInterval: countdownInterval,
+        finalTimeout: finalTimeout
+      });
+
+      recomputeCurrentStatsAndList();
+
+      undoBtn.addEventListener('click', () => {
+        clearTimeout(finalTimeout);
+        clearInterval(countdownInterval);
+        dismissToast(toast);
+        pendingDeletions.delete(id);
+
+        if (cardEl) {
+          cardEl.style.display = 'flex';
+        }
+        recomputeCurrentStatsAndList();
+        showToast(`Đã hoàn tác xóa "${restaurant.name}" 🐔`, 'success');
+      });
+    }
+
+    async function commitDeleteRestaurant(restaurantId) {
+      if (!dbInstance) return;
+      try {
+        await new Promise((resolve, reject) => {
+          const tx = dbInstance.transaction(['restaurants', 'images'], 'readwrite');
+          const rStore = tx.objectStore('restaurants');
+          const iStore = tx.objectStore('images');
+
+          rStore.delete(restaurantId);
+
+          const index = iStore.index('restaurantId');
+          const req = index.openKeyCursor(IDBKeyRange.only(restaurantId));
+
+          req.onsuccess = (e) => {
+            const cursor = e.target.result;
+            if (cursor) {
+              iStore.delete(cursor.primaryKey);
+              cursor.continue();
+            }
+          };
+
+          tx.oncomplete = () => resolve();
+          tx.onerror = (e) => reject(e.target.error || new Error('Lỗi xóa trong IndexedDB'));
+        });
+
+        await loadCityData(currentCity);
+      } catch (err) {
+        showToast('Lỗi xóa dữ liệu: ' + (err.message || ''), 'error');
+      }
+    }
+
+    async function recomputeCurrentStatsAndList() {
+      allCityRestaurants = await getRestaurantsByCity(currentCity);
+      updateStats(allCityRestaurants);
+      initPriceSliderFromData(allCityRestaurants);
+      applyFiltersAndRender();
+    }
+
+    /* ==========================================================================
+       QUẢN LÝ THÀNH PHỐ
+       ========================================================================== */
+    function setCity(newCity) {
+      if (newCity !== 'HN' && newCity !== 'BG') {
+        newCity = 'HN';
+      }
+      currentCity = newCity;
+      localStorage.setItem(STORAGE_KEY_CITY, newCity);
+
+      const label = `${CITY_NAMES[newCity]} (${newCity})`;
+      document.getElementById('currentCityLabel').textContent = label;
+      document.getElementById('listCityBadge').textContent = CITY_NAMES[newCity];
+
+      const btnHN = document.getElementById('modalSelectHN');
+      const btnBG = document.getElementById('modalSelectBG');
+      if (btnHN && btnBG) {
+        btnHN.classList.toggle('selected', newCity === 'HN');
+        btnBG.classList.toggle('selected', newCity === 'BG');
+      }
+
+      closeAllModals();
+
+      // Khi đổi thành phố: đóng mọi modal, reset tìm kiếm/bộ lọc và danh sách loại tạm vòng quay
+      tempExcludedIds.clear();
+      resetAllFilters();
+      loadCityData(newCity);
+    }
+
+    function closeAllModals() {
+      const cityModal = document.getElementById('cityModal');
+      if (cityModal) cityModal.classList.remove('active');
+
+      const dupModal = document.getElementById('duplicateWarningModal');
+      if (dupModal) dupModal.classList.remove('active');
+
+      const resultModal = document.getElementById('wheelResultModal');
+      if (resultModal) resultModal.classList.remove('active');
+
+      const importModal = document.getElementById('importModal');
+      if (importModal) importModal.classList.remove('active');
+
+      const overwriteModal = document.getElementById('overwriteConfirmModal');
+      if (overwriteModal) overwriteModal.classList.remove('active');
+
+      closeRestaurantModal();
+      closeLightbox();
+    }
+
+    function openCityModal() {
+      const cityModal = document.getElementById('cityModal');
+      if (cityModal) cityModal.classList.add('active');
+    }
+
+    /* ==========================================================================
+       PHASE 5: SAO LƯU VÀ PHỤC HỒI (BACKUP & IMPORT JSON)
+       Xử lý cả hai thành phố HN và BG, 100% offline, Base64 ảnh JPEG, chống trùng
+       ========================================================================== */
+
+    function updateLastBackupDisplay() {
+      const lastBackup = localStorage.getItem(STORAGE_KEY_BACKUP);
+      const lastBackupLabel = document.getElementById('lastBackupLabel');
+      if (!lastBackupLabel) return;
+      if (!lastBackup) {
+        lastBackupLabel.textContent = 'Lần backup gần nhất: Chưa backup';
+        return;
+      }
+      try {
+        const backupDate = new Date(lastBackup);
+        if (isNaN(backupDate.getTime())) {
+          lastBackupLabel.textContent = 'Lần backup gần nhất: Chưa backup';
+          return;
+        }
+        const now = new Date();
+        const startOfBackup = new Date(backupDate.getFullYear(), backupDate.getMonth(), backupDate.getDate());
+        const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const diffDays = Math.max(0, Math.floor((startOfToday.getTime() - startOfBackup.getTime()) / (1000 * 60 * 60 * 24)));
+        lastBackupLabel.textContent = (diffDays <= 0)
+          ? 'Lần backup gần nhất: hôm nay'
+          : `Lần backup gần nhất: ${diffDays} ngày trước`;
+      } catch (_) {
+        lastBackupLabel.textContent = 'Lần backup gần nhất: Chưa backup';
+      }
+    }
+
+    function getAllRestaurantsFromDB() {
+      return new Promise((resolve, reject) => {
+        if (!dbInstance) {
+          resolve([]);
+          return;
+        }
+        try {
+          const tx = dbInstance.transaction(['restaurants'], 'readonly');
+          const store = tx.objectStore('restaurants');
+          const req = store.getAll();
+          req.onsuccess = () => {
+            const list = req.result || [];
+            resolve(list.filter(r => !pendingDeletions.has(r.id)));
+          };
+          req.onerror = () => reject(req.error || new Error('Không thể đọc dữ liệu quán'));
+        } catch (err) {
+          reject(err);
+        }
+      });
+    }
+
+    function getAllImagesFromDB() {
+      return new Promise((resolve, reject) => {
+        if (!dbInstance) {
+          resolve([]);
+          return;
+        }
+        try {
+          const tx = dbInstance.transaction(['images'], 'readonly');
+          const store = tx.objectStore('images');
+          const req = store.getAll();
+          req.onsuccess = () => {
+            const list = req.result || [];
+            resolve(list.filter(img => !pendingDeletions.has(img.restaurantId)));
+          };
+          req.onerror = () => reject(req.error || new Error('Không thể đọc dữ liệu ảnh'));
+        } catch (err) {
+          reject(err);
+        }
+      });
+    }
+
+    function blobToBase64(blob) {
+      return new Promise((resolve, reject) => {
+        if (!blob) {
+          resolve('');
+          return;
+        }
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result || '');
+        reader.onerror = () => reject(new Error('Lỗi chuyển Blob sang Base64'));
+        reader.readAsDataURL(blob);
+      });
+    }
+
+    function base64ToBlob(dataStr) {
+      if (!dataStr || typeof dataStr !== 'string') {
+        throw new Error('Dữ liệu Base64 không hợp lệ');
+      }
+      let mime = 'image/jpeg';
+      let b64 = dataStr;
+      if (dataStr.startsWith('data:')) {
+        const commaIdx = dataStr.indexOf(',');
+        if (commaIdx !== -1) {
+          const mimeMatch = dataStr.slice(0, commaIdx).match(/:(.*?);/);
+          if (mimeMatch) mime = mimeMatch[1];
+          b64 = dataStr.slice(commaIdx + 1);
+        }
+      }
+      const binaryStr = atob(b64);
+      const len = binaryStr.length;
+      const u8arr = new Uint8Array(len);
+      for (let i = 0; i < len; i++) {
+        u8arr[i] = binaryStr.charCodeAt(i);
+      }
+      return new Blob([u8arr], { type: mime });
+    }
+
+    async function createThumbFromBlob(blob) {
+      if (!blob) return null;
+      let bitmap = null;
+      try {
+        bitmap = await createImageBitmap(blob, { imageOrientation: 'from-image' });
+      } catch (_) {
+        return blob;
+      }
+      try {
+        let tw = bitmap.width;
+        let th = bitmap.height;
+        const maxThumbW = 300;
+        if (tw > maxThumbW) {
+          th = Math.round(th * (maxThumbW / tw));
+          tw = maxThumbW;
+        }
+        const thumbCanvas = document.createElement('canvas');
+        thumbCanvas.width = tw;
+        thumbCanvas.height = th;
+        const tCtx = thumbCanvas.getContext('2d');
+        tCtx.fillStyle = '#FFFFFF';
+        tCtx.fillRect(0, 0, tw, th);
+        tCtx.drawImage(bitmap, 0, 0, tw, th);
+        const thumbBlob = await new Promise(resolve => thumbCanvas.toBlob(resolve, 'image/jpeg', 0.8));
+        if (bitmap.close) bitmap.close();
+        return thumbBlob || blob;
+      } catch (_) {
+        if (bitmap && bitmap.close) bitmap.close();
+        return blob;
+      }
+    }
+
+    async function exportBackup() {
+      const exportBtn = document.getElementById('exportBtn');
+      const originalText = exportBtn.textContent;
+
+      try {
+        exportBtn.disabled = true;
+        exportBtn.textContent = 'Đang đọc dữ liệu...';
+
+        const restaurants = await getAllRestaurantsFromDB();
+        const rawImages = await getAllImagesFromDB();
+
+        const exportedImages = [];
+        const totalImages = rawImages.length;
+
+        if (totalImages > 0) {
+          const batchSize = 10;
+          for (let i = 0; i < totalImages; i += batchSize) {
+            const batch = rawImages.slice(i, i + batchSize);
+            for (const img of batch) {
+              let base64 = '';
+              if (img.blob) {
+                base64 = await blobToBase64(img.blob);
+              }
+              exportedImages.push({
+                imageId: img.imageId,
+                restaurantId: img.restaurantId,
+                type: img.type || 'food',
+                createdAt: img.createdAt || new Date().toISOString(),
+                data: base64
+              });
+            }
+            const processed = Math.min(i + batchSize, totalImages);
+            const percent = Math.round((processed / totalImages) * 100);
+            exportBtn.textContent = `Đang xuất... ${percent}%`;
+          }
+        }
+
+        const now = new Date();
+        const backupObject = {
+          app: 'hen',
+          version: 1,
+          exportedAt: now.toISOString(),
+          restaurants: restaurants,
+          images: exportedImages
+        };
+
+        const jsonStr = JSON.stringify(backupObject, null, 2);
+        const jsonBlob = new Blob([jsonStr], { type: 'application/json' });
+        const downloadUrl = URL.createObjectURL(jsonBlob);
+
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const filename = `hen_backup_${year}${month}${day}_v1.json`;
+
+        const a = document.createElement('a');
+        a.href = downloadUrl;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(downloadUrl), 2000);
+
+        localStorage.setItem(STORAGE_KEY_BACKUP, now.toISOString());
+        updateLastBackupDisplay();
+
+        showToast(`Xuất dữ liệu thành công! (${restaurants.length} quán, ${exportedImages.length} ảnh)`, 'success');
+      } catch (err) {
+        showToast('Lỗi khi xuất dữ liệu: ' + (err.message || ''), 'error');
+      } finally {
+        exportBtn.disabled = false;
+        exportBtn.textContent = originalText;
+      }
+    }
+
+    let currentSelectedImportFile = null;
+
+    function openImportModal() {
+      const modal = document.getElementById('importModal');
+      if (!modal) return;
+      resetImportModalState();
+      modal.classList.add('active');
+    }
+
+    function closeImportModal() {
+      const modal = document.getElementById('importModal');
+      if (modal) modal.classList.remove('active');
+      resetImportModalState();
+    }
+
+    function resetImportModalState() {
+      currentSelectedImportFile = null;
+      const fileInput = document.getElementById('importFileInput');
+      if (fileInput) fileInput.value = '';
+
+      const dropZone = document.getElementById('importDropZone');
+      if (dropZone) dropZone.style.display = 'block';
+
+      const fileDetails = document.getElementById('importFileDetails');
+      if (fileDetails) fileDetails.style.display = 'none';
+
+      const startBtn = document.getElementById('startImportBtn');
+      if (startBtn) {
+        startBtn.disabled = true;
+        startBtn.textContent = 'Bắt đầu nhập dữ liệu';
+      }
+
+      const progressContainer = document.getElementById('importProgressContainer');
+      if (progressContainer) progressContainer.style.display = 'none';
+
+      const progressBar = document.getElementById('importProgressBar');
+      if (progressBar) progressBar.style.width = '0%';
+
+      const percentText = document.getElementById('importPercentText');
+      if (percentText) percentText.textContent = '0%';
+
+      const statusText = document.getElementById('importStatusText');
+      if (statusText) statusText.textContent = 'Đang xử lý dữ liệu...';
+    }
+
+    async function handleImportFileSelected(file) {
+      if (!file) return;
+
+      if (!file.name.toLowerCase().endsWith('.json') && file.type && !file.type.includes('json')) {
+        showToast('Vui lòng chọn tệp định dạng .json!', 'error');
+        return;
+      }
+
+      currentSelectedImportFile = file;
+
+      const modal = document.getElementById('importModal');
+      if (modal && !modal.classList.contains('active')) {
+        modal.classList.add('active');
+      }
+
+      const dropZone = document.getElementById('importDropZone');
+      const fileDetails = document.getElementById('importFileDetails');
+      const fileNameEl = document.getElementById('importFileName');
+      const fileStatsEl = document.getElementById('importFileStats');
+      const startBtn = document.getElementById('startImportBtn');
+
+      if (dropZone) dropZone.style.display = 'none';
+      if (fileDetails) fileDetails.style.display = 'block';
+      if (fileNameEl) fileNameEl.textContent = file.name;
+      if (fileStatsEl) fileStatsEl.textContent = `Dung lượng: ${(file.size / 1024).toFixed(1)} KB. Đang kiểm tra cấu trúc...`;
+
+      try {
+        const text = await file.text();
+        const parsed = JSON.parse(text);
+        if (!parsed || parsed.app !== 'hen' || !Array.isArray(parsed.restaurants) || !Array.isArray(parsed.images)) {
+          showToast('Tệp sao lưu không đúng định dạng của HEN (app phải là "hen" và có đủ restaurants, images)!', 'error');
+          if (fileStatsEl) fileStatsEl.textContent = '❌ Tệp không hợp lệ: Không phải định dạng HEN!';
+          if (startBtn) startBtn.disabled = true;
+          return;
+        }
+
+        if (fileStatsEl) {
+          fileStatsEl.textContent = `Dung lượng: ${(file.size / 1024).toFixed(1)} KB · ${parsed.restaurants.length} quán ăn · ${parsed.images.length} ảnh`;
+        }
+        if (startBtn) startBtn.disabled = false;
+      } catch (err) {
+        showToast('Tệp không phải là JSON hợp lệ!', 'error');
+        if (fileStatsEl) fileStatsEl.textContent = '❌ Lỗi cú pháp JSON!';
+        if (startBtn) startBtn.disabled = true;
+      }
+    }
+
+    function askOverwriteConfirmation(dupCount) {
+      return new Promise((resolve) => {
+        const modal = document.getElementById('overwriteConfirmModal');
+        const msg = document.getElementById('overwriteConfirmMsg');
+        if (msg) {
+          msg.textContent = `Sẽ ghi đè ${dupCount} quán hiện có.`;
+        }
+
+        if (!modal) {
+          resolve(window.confirm(`Sẽ ghi đè ${dupCount} quán hiện có.`));
+          return;
+        }
+
+        modal.classList.add('active');
+
+        const confirmBtn = document.getElementById('confirmOverwriteBtn');
+        const cancelBtn = document.getElementById('cancelOverwriteBtn');
+        const closeBtn = document.getElementById('closeOverwriteModalBtn');
+
+        function cleanup(result) {
+          modal.classList.remove('active');
+          if (confirmBtn) confirmBtn.removeEventListener('click', onConfirm);
+          if (cancelBtn) cancelBtn.removeEventListener('click', onCancel);
+          if (closeBtn) closeBtn.removeEventListener('click', onCancel);
+          resolve(result);
+        }
+
+        function onConfirm() { cleanup(true); }
+        function onCancel() { cleanup(false); }
+
+        if (confirmBtn) confirmBtn.addEventListener('click', onConfirm);
+        if (cancelBtn) cancelBtn.addEventListener('click', onCancel);
+        if (closeBtn) closeBtn.addEventListener('click', onCancel);
+      });
+    }
+
+    async function runImport() {
+      if (!currentSelectedImportFile) {
+        showToast('Chưa chọn tệp sao lưu!', 'error');
+        return;
+      }
+
+      const startBtn = document.getElementById('startImportBtn');
+      const cancelBtn = document.getElementById('cancelImportModalBtn');
+      const progressContainer = document.getElementById('importProgressContainer');
+      const progressBar = document.getElementById('importProgressBar');
+      const percentText = document.getElementById('importPercentText');
+      const statusText = document.getElementById('importStatusText');
+
+      if (startBtn) startBtn.disabled = true;
+      if (cancelBtn) cancelBtn.disabled = true;
+      if (progressContainer) progressContainer.style.display = 'block';
+
+      try {
+        const text = await currentSelectedImportFile.text();
+        let parsed = null;
+        try {
+          parsed = JSON.parse(text);
+        } catch (_) {
+          showToast('Tệp không phải là JSON hợp lệ!', 'error');
+          return;
+        }
+
+        if (!parsed || parsed.app !== 'hen' || !Array.isArray(parsed.restaurants) || !Array.isArray(parsed.images)) {
+          showToast('Tệp sao lưu không đúng định dạng của HEN (thiếu trường hợp lệ hoặc app khác "hen")!', 'error');
+          return;
+        }
+
+        const validCategories = ["Bún/Phở", "Cơm", "Lẩu", "Nướng", "Ăn vặt", "Cafe", "Khác"];
+        const validCities = ["HN", "BG"];
+        const validStatuses = ["eaten", "wishlist"];
+
+        let invalidRestaurantsCount = 0;
+        const validRestaurants = [];
+        const validRestaurantIdMap = new Map();
+
+        for (const r of parsed.restaurants) {
+          if (!r || typeof r !== 'object') {
+            invalidRestaurantsCount++;
+            continue;
+          }
+          if (!r.id || typeof r.id !== 'string') {
+            invalidRestaurantsCount++;
+            continue;
+          }
+          if (!r.name || typeof r.name !== 'string' || r.name.trim().length === 0) {
+            invalidRestaurantsCount++;
+            continue;
+          }
+          if (!validCities.includes(r.city)) {
+            invalidRestaurantsCount++;
+            continue;
+          }
+          if (!validCategories.includes(r.category)) {
+            invalidRestaurantsCount++;
+            continue;
+          }
+          if (!validStatuses.includes(r.status)) {
+            invalidRestaurantsCount++;
+            continue;
+          }
+          const isRatingValid = (val) => (val === null || val === undefined) || (Number.isInteger(val) && val >= 1 && val <= 5);
+          if (!isRatingValid(r.ratingHung) || !isRatingValid(r.ratingNgan)) {
+            invalidRestaurantsCount++;
+            continue;
+          }
+          const isPriceValid = (val) => (val === null || val === undefined) || (typeof val === 'number' && !isNaN(val) && val >= 0);
+          if (!isPriceValid(r.price)) {
+            invalidRestaurantsCount++;
+            continue;
+          }
+
+          const cleanRest = {
+            id: String(r.id),
+            city: r.city,
+            name: String(r.name).trim(),
+            category: r.category,
+            price: (typeof r.price === 'number' && !isNaN(r.price)) ? r.price : null,
+            address: (typeof r.address === 'string') ? r.address.trim() : '',
+            status: r.status,
+            ratingHung: (Number.isInteger(r.ratingHung) && r.ratingHung >= 1 && r.ratingHung <= 5) ? r.ratingHung : null,
+            ratingNgan: (Number.isInteger(r.ratingNgan) && r.ratingNgan >= 1 && r.ratingNgan <= 5) ? r.ratingNgan : null,
+            review: (typeof r.review === 'string') ? r.review : '',
+            createdAt: r.createdAt || new Date().toISOString(),
+            updatedAt: r.updatedAt || new Date().toISOString()
+          };
+          validRestaurants.push(cleanRest);
+          validRestaurantIdMap.set(cleanRest.id, cleanRest);
+        }
+
+        // Validate images in file
+        let invalidImagesCount = 0;
+        const validImages = [];
+
+        for (const img of parsed.images) {
+          if (!img || typeof img !== 'object') {
+            invalidImagesCount++;
+            continue;
+          }
+          if (!img.imageId || !img.restaurantId || !img.data || typeof img.data !== 'string') {
+            invalidImagesCount++;
+            continue;
+          }
+          if (!validRestaurantIdMap.has(img.restaurantId)) {
+            invalidImagesCount++;
+            continue;
+          }
+          try {
+            const raw = img.data;
+            const cIdx = raw.indexOf(',');
+            const b64 = (cIdx !== -1) ? raw.slice(cIdx + 1) : raw;
+            atob(b64);
+          } catch (_) {
+            invalidImagesCount++;
+            continue;
+          }
+
+          validImages.push({
+            imageId: String(img.imageId),
+            restaurantId: String(img.restaurantId),
+            type: (img.type === 'menu') ? 'menu' : 'food',
+            data: img.data,
+            createdAt: img.createdAt || new Date().toISOString()
+          });
+        }
+
+        // Compare against existing DB restaurants
+        const existingRestaurants = await getAllRestaurantsFromDB();
+        const existingIdSet = new Set(existingRestaurants.map(r => r.id));
+
+        const skipDuplicatesCheckbox = document.getElementById('importSkipDuplicates');
+        const skipDuplicates = skipDuplicatesCheckbox ? skipDuplicatesCheckbox.checked : true;
+
+        const duplicateRestaurants = validRestaurants.filter(r => existingIdSet.has(r.id));
+        const nonDuplicateRestaurants = validRestaurants.filter(r => !existingIdSet.has(r.id));
+
+        let finalRestaurantsToSave = [];
+        const restaurantsToOverwriteIds = new Set();
+        let skippedRestaurantsTotal = invalidRestaurantsCount;
+        let overwrittenCount = 0;
+        let addedCount = 0;
+
+        if (skipDuplicates) {
+          finalRestaurantsToSave = nonDuplicateRestaurants;
+          skippedRestaurantsTotal += duplicateRestaurants.length;
+          addedCount = nonDuplicateRestaurants.length;
+          overwrittenCount = 0;
+        } else {
+          if (duplicateRestaurants.length > 0) {
+            const confirmed = await askOverwriteConfirmation(duplicateRestaurants.length);
+            if (!confirmed) {
+              showToast('Đã hủy thao tác nhập dữ liệu.', 'info');
+              return;
+            }
+            duplicateRestaurants.forEach(r => restaurantsToOverwriteIds.add(r.id));
+            overwrittenCount = duplicateRestaurants.length;
+          }
+          finalRestaurantsToSave = validRestaurants;
+          addedCount = nonDuplicateRestaurants.length;
+        }
+
+        // Filter images to process: only for restaurants being saved
+        const allowedRestaurantIds = new Set(finalRestaurantsToSave.map(r => r.id));
+        const imagesToProcess = validImages.filter(img => allowedRestaurantIds.has(img.restaurantId));
+
+        const preparedImages = [];
+        const totalImages = imagesToProcess.length;
+
+        for (let i = 0; i < totalImages; i++) {
+          const imgItem = imagesToProcess[i];
+          try {
+            const blob = base64ToBlob(imgItem.data);
+            const thumb = await createThumbFromBlob(blob);
+            preparedImages.push({
+              imageId: imgItem.imageId,
+              restaurantId: imgItem.restaurantId,
+              type: imgItem.type,
+              blob: blob,
+              thumb: thumb || blob,
+              createdAt: imgItem.createdAt
+            });
+          } catch (_) {
+            invalidImagesCount++;
+          }
+          const pct = Math.round(((i + 1) / totalImages) * 100);
+          if (progressBar) progressBar.style.width = pct + '%';
+          if (percentText) percentText.textContent = pct + '%';
+          if (statusText) statusText.textContent = `Đang xử lý ảnh (${i + 1}/${totalImages})...`;
+        }
+
+        if (statusText) statusText.textContent = 'Đang lưu vào cơ sở dữ liệu...';
+        if (progressBar) progressBar.style.width = '100%';
+        if (percentText) percentText.textContent = '100%';
+
+        // Commit to IndexedDB
+        await new Promise((resolve, reject) => {
+          const tx = dbInstance.transaction(['restaurants', 'images'], 'readwrite');
+          const restStore = tx.objectStore('restaurants');
+          const imgStore = tx.objectStore('images');
+          const imgIndex = imgStore.index('restaurantId');
+
+          tx.oncomplete = () => resolve();
+          tx.onerror = () => reject(tx.error || new Error('Lỗi transaction khi lưu dữ liệu'));
+
+          // Delete old images for overwritten restaurants first
+          if (restaurantsToOverwriteIds.size > 0) {
+            for (const dupId of restaurantsToOverwriteIds) {
+              const keysReq = imgIndex.getAllKeys(IDBKeyRange.only(dupId));
+              keysReq.onsuccess = () => {
+                const keys = keysReq.result || [];
+                keys.forEach(k => imgStore.delete(k));
+              };
+            }
+          }
+
+          // Put restaurants
+          for (const r of finalRestaurantsToSave) {
+            restStore.put(r);
+          }
+
+          // Put images
+          for (const img of preparedImages) {
+            imgStore.put(img);
+          }
+        });
+
+        const summaryMsg = `Nhập dữ liệu thành công! Đã thêm: ${addedCount} quán, Ghi đè: ${overwrittenCount} quán, Bỏ qua: ${skippedRestaurantsTotal} quán, Tổng ảnh: ${preparedImages.length} ảnh.`;
+        showToast(summaryMsg, 'success', 6000);
+
+        closeImportModal();
+        await loadInitialData();
+      } catch (err) {
+        showToast('Lỗi khi nhập dữ liệu: ' + (err.message || ''), 'error');
+      } finally {
+        if (startBtn) startBtn.disabled = false;
+        if (cancelBtn) cancelBtn.disabled = false;
+        if (progressContainer) progressContainer.style.display = 'none';
+      }
+    }
+
+    /* ==========================================================================
+       KHỞI CHẠY ỨNG DỤNG & GẮN SỰ KIỆN TOÀN CỤC
+       ========================================================================== */
+    async function initApp() {
+      initTheme();
+
+      try {
+        await initIndexedDB();
+      } catch (e) {
+        console.error('IndexedDB Error:', e);
+      }
+
+      const savedCity = localStorage.getItem(STORAGE_KEY_CITY);
+      const welcomeOverlay = document.getElementById('welcomeOverlay');
+
+      if (!savedCity) {
+        if (welcomeOverlay) welcomeOverlay.style.display = 'flex';
+      } else {
+        if (welcomeOverlay) welcomeOverlay.style.display = 'none';
+        setCity(savedCity);
+      }
+
+      // Cập nhật dòng "Lần backup gần nhất" ở footer (Phase 5)
+      updateLastBackupDisplay();
+
+      // 1. Chặn dragover/drop toàn trang
+      window.addEventListener('dragover', (e) => {
+        e.preventDefault();
+      }, false);
+      window.addEventListener('drop', (e) => {
+        e.preventDefault();
+      }, false);
+
+      // 2. Dropzone tải ảnh trong form
+      const dropzone = document.getElementById('imageDropzone');
+      const fileInput = document.getElementById('imageFileInput');
+
+      dropzone.addEventListener('click', () => fileInput.click());
+      fileInput.addEventListener('change', () => {
+        handleFilesAdded(fileInput.files);
+        fileInput.value = '';
+      });
+
+      dropzone.addEventListener('dragenter', (e) => {
+        e.preventDefault();
+        dropzone.classList.add('dragover');
+      });
+      dropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropzone.classList.add('dragover');
+      });
+      dropzone.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('dragover');
+      });
+      dropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('dragover');
+        if (e.dataTransfer && e.dataTransfer.files) {
+          handleFilesAdded(e.dataTransfer.files);
+        }
+      });
+
+      // 3. Paste (Ctrl+V) xử lý ảnh thông minh
+      window.addEventListener('paste', (e) => {
+        const modal = document.getElementById('restaurantModal');
+        if (!modal || !modal.classList.contains('active')) return;
+
+        const clipboardData = e.clipboardData;
+        if (!clipboardData) return;
+
+        const imageFiles = [];
+
+        if (clipboardData.items) {
+          for (let i = 0; i < clipboardData.items.length; i++) {
+            const item = clipboardData.items[i];
+            if (item.type && item.type.startsWith('image/')) {
+              const file = item.getAsFile();
+              if (file) imageFiles.push(file);
+            }
+          }
+        } else if (clipboardData.files) {
+          for (let i = 0; i < clipboardData.files.length; i++) {
+            const file = clipboardData.files[i];
+            if (file.type && file.type.startsWith('image/')) {
+              imageFiles.push(file);
+            }
+          }
+        }
+
+        if (imageFiles.length > 0) {
+          e.preventDefault();
+          handleFilesAdded(imageFiles);
+          showToast(`Đã dán ${imageFiles.length} ảnh vào form 🐔`, 'info');
+        }
+      });
+
+      // 4. Sự kiện Form Modal
+      document.getElementById('addRestaurantBtn').addEventListener('click', openAddRestaurantModal);
+      document.getElementById('closeRestaurantModalBtn').addEventListener('click', closeRestaurantModal);
+      document.getElementById('cancelRestaurantBtn').addEventListener('click', closeRestaurantModal);
+      document.getElementById('restaurantForm').addEventListener('submit', handleSaveRestaurant);
+
+      // 5. Sự kiện Lightbox
+      document.getElementById('lightboxCloseBtn').addEventListener('click', closeLightbox);
+      document.getElementById('lightboxPrevBtn').addEventListener('click', lightboxPrev);
+      document.getElementById('lightboxNextBtn').addEventListener('click', lightboxNext);
+
+      // 6. Sự kiện BỘ LỌC & TÌM KIẾM (Phase 3)
+      const searchInput = document.getElementById('searchInput');
+      const searchClearBtn = document.getElementById('searchClearBtn');
+
+      searchInput.addEventListener('input', () => {
+        currentFilterSearch = searchInput.value;
+        searchClearBtn.classList.toggle('visible', currentFilterSearch.length > 0);
+        applyFiltersAndRender();
+      });
+
+      searchClearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        currentFilterSearch = '';
+        searchClearBtn.classList.remove('visible');
+        searchInput.focus();
+        applyFiltersAndRender();
+      });
+
+      const catChips = document.querySelectorAll('.cat-filter-chip');
+      catChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+          catChips.forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          currentFilterCategory = chip.dataset.category;
+          applyFiltersAndRender();
+        });
+      });
+
+      const statusBtns = document.querySelectorAll('.status-filter-btn');
+      statusBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          statusBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentFilterStatus = btn.dataset.status;
+          applyFiltersAndRender();
+        });
+      });
+
+      const fourStarsSwitch = document.getElementById('fourStarsToggle');
+      fourStarsSwitch.addEventListener('change', () => {
+        filterFourStarsOnly = fourStarsSwitch.checked;
+        applyFiltersAndRender();
+      });
+
+      const priceSlider = document.getElementById('priceSlider');
+      const priceSliderValue = document.getElementById('priceSliderValue');
+      priceSlider.addEventListener('input', () => {
+        currentFilterPrice = Number(priceSlider.value);
+        priceSliderValue.textContent = currentFilterPrice.toLocaleString('vi-VN') + ' đ';
+        applyFiltersAndRender();
+      });
+
+      document.getElementById('resetFiltersBtn').addEventListener('click', resetAllFilters);
+
+      // 7. Sự kiện VÒNG QUAY MAY MẮN (Phase 4)
+      document.getElementById('spinWheelBtn').addEventListener('click', spinWheel);
+      document.getElementById('shuffleWheelBtn').addEventListener('click', () => {
+        if (isSpinning) return;
+        updateWheelDataAndDraw(true);
+        showToast('Đã xáo lại danh sách trong vòng quay 🎲', 'info');
+      });
+      document.getElementById('restoreExcludedBtn').addEventListener('click', restoreExcludedRestaurants);
+      document.getElementById('closeResultModalBtn').addEventListener('click', closeWheelResultModal);
+      document.getElementById('spinAnotherBtn').addEventListener('click', handleSpinAnother);
+
+      // 8. Phím tắt bàn phím
+      window.addEventListener('keydown', (e) => {
+        if (e.key === '/') {
+          const activeEl = document.activeElement;
+          const tag = activeEl ? activeEl.tagName.toLowerCase() : '';
+          const isInput = activeEl && (activeEl.isContentEditable || tag === 'input' || tag === 'textarea' || tag === 'select');
+
+          if (!isInput) {
+            const isAnyModalActive = document.querySelector('.modal-backdrop.active, .lightbox-backdrop.active');
+            if (!isAnyModalActive) {
+              e.preventDefault();
+              searchInput.focus();
+              searchInput.select();
+              return;
+            }
+          }
+        }
+
+        const lightbox = document.getElementById('lightboxModal');
+        if (lightbox && lightbox.classList.contains('active')) {
+          if (e.key === 'Escape') {
+            closeLightbox();
+          } else if (e.key === 'ArrowLeft') {
+            lightboxPrev();
+          } else if (e.key === 'ArrowRight') {
+            lightboxNext();
+          }
+          return;
+        }
+
+        if (e.key === 'Escape') {
+          closeAllModals();
+        }
+      });
+
+      // 9. Sự kiện chọn Thành phố
+      document.getElementById('welcomeSelectHN').addEventListener('click', () => {
+        if (welcomeOverlay) welcomeOverlay.style.display = 'none';
+        setCity('HN');
+        showToast('Đã chọn thành phố Hà Nội 🐔', 'success');
+      });
+
+      document.getElementById('welcomeSelectBG').addEventListener('click', () => {
+        if (welcomeOverlay) welcomeOverlay.style.display = 'none';
+        setCity('BG');
+        showToast('Đã chọn thành phố Bắc Giang 🐔', 'success');
+      });
+
+      document.getElementById('cityBtn').addEventListener('click', openCityModal);
+      document.getElementById('closeCityModalBtn').addEventListener('click', closeAllModals);
+
+      document.getElementById('modalSelectHN').addEventListener('click', () => {
+        setCity('HN');
+        showToast('Đã chuyển sang thành phố Hà Nội 🐔', 'info');
+      });
+
+      document.getElementById('modalSelectBG').addEventListener('click', () => {
+        setCity('BG');
+        showToast('Đã chuyển sang thành phố Bắc Giang 🐔', 'info');
+      });
+
+      // Đóng modal khi bấm ra ngoài nền
+      document.getElementById('cityModal').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('cityModal')) closeAllModals();
+      });
+      document.getElementById('restaurantModal').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('restaurantModal')) closeRestaurantModal();
+      });
+      document.getElementById('lightboxModal').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('lightboxModal')) closeLightbox();
+      });
+      document.getElementById('duplicateWarningModal').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('duplicateWarningModal')) {
+          document.getElementById('duplicateWarningModal').classList.remove('active');
+        }
+      });
+      document.getElementById('wheelResultModal').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('wheelResultModal')) closeWheelResultModal();
+      });
+
+      // 10. Sự kiện Sao lưu & Phục hồi (Phase 5: Export / Import JSON)
+      const exportBtn = document.getElementById('exportBtn');
+      if (exportBtn) {
+        exportBtn.addEventListener('click', exportBackup);
+      }
+
+      const importBtn = document.getElementById('importBtn');
+      if (importBtn) {
+        importBtn.addEventListener('click', openImportModal);
+      }
+
+      const importFileInput = document.getElementById('importFileInput');
+      if (importFileInput) {
+        importFileInput.addEventListener('change', (e) => {
+          if (e.target.files && e.target.files[0]) {
+            handleImportFileSelected(e.target.files[0]);
+          }
+        });
+      }
+
+      const importDropZone = document.getElementById('importDropZone');
+      if (importDropZone) {
+        importDropZone.addEventListener('click', () => {
+          if (importFileInput) importFileInput.click();
+        });
+        importDropZone.addEventListener('dragenter', (e) => {
+          e.preventDefault();
+          importDropZone.classList.add('dragover');
+        });
+        importDropZone.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          importDropZone.classList.add('dragover');
+        });
+        importDropZone.addEventListener('dragleave', (e) => {
+          e.preventDefault();
+          importDropZone.classList.remove('dragover');
+        });
+        importDropZone.addEventListener('drop', (e) => {
+          e.preventDefault();
+          importDropZone.classList.remove('dragover');
+          if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) {
+            handleImportFileSelected(e.dataTransfer.files[0]);
+          }
+        });
+      }
+
+      const clearSelectedFileBtn = document.getElementById('clearSelectedFileBtn');
+      if (clearSelectedFileBtn) {
+        clearSelectedFileBtn.addEventListener('click', resetImportModalState);
+      }
+
+      const closeImportModalBtn = document.getElementById('closeImportModalBtn');
+      if (closeImportModalBtn) {
+        closeImportModalBtn.addEventListener('click', closeImportModal);
+      }
+
+      const cancelImportModalBtn = document.getElementById('cancelImportModalBtn');
+      if (cancelImportModalBtn) {
+        cancelImportModalBtn.addEventListener('click', closeImportModal);
+      }
+
+      const startImportBtn = document.getElementById('startImportBtn');
+      if (startImportBtn) {
+        startImportBtn.addEventListener('click', runImport);
+      }
+
+      const importModal = document.getElementById('importModal');
+      if (importModal) {
+        importModal.addEventListener('click', (e) => {
+          if (e.target === importModal) closeImportModal();
+        });
+      }
+
+      const overwriteConfirmModal = document.getElementById('overwriteConfirmModal');
+      if (overwriteConfirmModal) {
+        overwriteConfirmModal.addEventListener('click', (e) => {
+          if (e.target === overwriteConfirmModal) overwriteConfirmModal.classList.remove('active');
+        });
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initApp);
+    } else {
+      initApp();
+    }
+  </script>
+</body>
+</html>
